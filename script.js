@@ -1,10 +1,9 @@
-// Teks yang mau diketik otomatis
 const textArray = ["Digital Asset Creator", "Microstock Contributor", "Visual Explorer"];
 let textIndex = 0;
 let charIndex = 0;
 const typingSpeed = 100;
 const erasingSpeed = 50;
-const newTextDelay = 2000; // Jeda sebelum ngetik kata baru
+const newTextDelay = 2000;
 
 const typingElement = document.querySelector(".typing-text");
 

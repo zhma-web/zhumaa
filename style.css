@@ -14,11 +14,29 @@
     padding-bottom: 5px;
     border-bottom: 2px solid transparent;
 }
+.nav-menu {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Jarak antar tombol */
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #fff; /* Teks putih biar kontras */
+    background-color: #007bff; /* Biru ceria */
+    padding: 10px 20px; /* Bikin link jadi kotak/tombol */
+    border-radius: 20px; /* Bikin ujungnya melengkung */
+    font-weight: 500;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+}
 
 .nav-menu a:hover {
-    color: #007bff; /* Biru ceria pas di-hover */
-    border-bottom: 2px solid #007bff;
+    background-color: #0056b3; /* Biru lebih gelap saat disentuh */
+    transform: translateY(-2px); /* Tombol sedikit "terangkat" pas di-hover */
 }
+
 .tagline {
     font-size: 1.1rem;
     color: #007bff;
