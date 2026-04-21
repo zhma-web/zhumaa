@@ -3,7 +3,7 @@ let textIndex = 0;
 let charIndex = 0;
 const typingSpeed = 100;
 const erasingSpeed = 50;
-const newTextDelay = 2000;
+const newTextDelay = 2000; // Jeda sebelum ngetik kata baru
 
 const typingElement = document.querySelector(".typing-text");
 
@@ -29,6 +29,7 @@ function erase() {
     }
 }
 
+// Mulai animasi pas halaman selesai dimuat
 document.addEventListener("DOMContentLoaded", function() {
     if(textArray.length) setTimeout(type, newTextDelay + 250);
 });
