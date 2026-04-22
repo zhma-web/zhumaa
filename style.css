@@ -65,11 +65,13 @@ button {
 }
 
 
+/* 3. Definisi Animasi (Keyframes) */
 
 /* Animasi untuk memunculkan seluruh body */
 @keyframes fadeInBody {
-    from { opacity: 0;
-     to Â{ opacity: 1; /* Jadi sepenuhnya terlihat */
+    to {
+        opacity: 1; /* Jadi sepenuhnya terlihat */
+    }
 }
 
 /* Animasi untuk memunculkan kartu dengan efek slide-up */
