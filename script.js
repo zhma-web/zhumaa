@@ -24,3 +24,4 @@ function copyText() {
         alert("Email copied to clipboard!");
     });
 }
+
