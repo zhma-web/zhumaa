@@ -10,7 +10,17 @@ btn.addEventListener('click', () => {
     // Reset setelah 2 detik
     setTimeout(() => {
         card.style.backgroundColor = 'white';
-        btn.textContent = 'Say Hello!';
+        btn.textContent = 'Say Hello to Zhuma';
         btn.style.backgroundColor = '#333';
     }, 2000);
 });
+
+function copyText() {
+    const text = document.getElementById("email").innerText;
+    // Mengambil teks saja, mengabaikan span
+    const cleanText = text.replace(" (click to copy)", "");
+    
+    navigator.clipboard.writeText(cleanText).then(() => {
+        alert("Email copied to clipboard!");
+    });
+}

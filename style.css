@@ -14,7 +14,7 @@ body {
 .card {
     background: white;
     padding: 2rem;
-    border-radius: 15px;
+    border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
     text-align: center;
 background: rgba(255, 255, 255, 0.95); /* Sedikit transparan */
@@ -67,7 +67,7 @@ body {
     background-image: radial-gradient(#d3d9e1 1px, transparent 1px);
     background-size: 20px 20px; /* Ukuran pola titik */
     background-attachment: fixed; /* Bikin pattern diam saat scroll */
-    
+font-family: 'Outfit', sans-serif;    
     /* Memastikan body siap untuk animasi */
     opacity: 0; /* Mulai dari transparan */
     animation: fadeInBody 1.2s ease-out forwards; /* Panggil animasi masuk */
@@ -101,4 +101,14 @@ body {
         opacity: 1;
         transform: translateY(0); /* Kembali ke posisi asli */
     }
+}
+/* Efek Melayang */
+.card {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
 }
