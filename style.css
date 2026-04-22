@@ -57,3 +57,56 @@ button {
 }
 
 body { background-color: var(--bg-color); color: var(--text-color); }
+
+
+
+
+
+/* =========================================
+   BAGIAN UPGRADE: BACKGROUND & ANIMASI
+   (Paste di paling bawah file CSS)  Part 2
+   ========================================= */
+
+/* 1. Modifikasi Latar Belakang Body */
+body {
+    /* Menambahkan subtle pattern transparan di atas warna dasar */
+    /* Kita pakai pola titik-titik (dots) kecil yang sangat tipis */
+    background-color: #f4f7f6; /* Warna dasar tetap sama */
+    background-image: radial-gradient(#d3d9e1 1px, transparent 1px);
+    background-size: 20px 20px; /* Ukuran pola titik */
+    background-attachment: fixed; /* Bikin pattern diam saat scroll */
+    
+    /* Memastikan body siap untuk animasi */
+    opacity: 0; /* Mulai dari transparan */
+    animation: fadeInBody 1.2s ease-out forwards; /* Panggil animasi masuk */
+}
+
+/* 2. Modifikasi Kartu Profil */
+.card {
+    /* Menambahkan sedikit glassmorphism effect biar lebih modern */
+    background: rgba(255, 255, 255, 0.95); /* Sedikit transparan */
+    backdrop-filter: blur(5px); /* Efek blur di belakang kartu */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Border tipis transparan */
+
+    /* Animasi masuk untuk kartu itu sendiri */
+    opacity: 0;
+    transform: translateY(20px); /* Mulai dari sedikit di bawah */
+    animation: slideInCard 0.8s ease-out 0.4s forwards; /* Panggil animasi dengan delay */
+}
+
+/* 3. Definisi Animasi (Keyframes) */
+
+/* Animasi untuk memunculkan seluruh body */
+@keyframes fadeInBody {
+    to {
+        opacity: 1; /* Jadi sepenuhnya terlihat */
+    }
+}
+
+/* Animasi untuk memunculkan kartu dengan efek slide-up */
+@keyframes slideInCard {
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Kembali ke posisi asli */
+    }
+}
