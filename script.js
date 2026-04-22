@@ -1,35 +1,16 @@
-const textArray = ["Digital Asset Creator", "Microstock Contributor", "Visual Explorer"];
-let textIndex = 0;
-let charIndex = 0;
-const typingSpeed = 100;
-const erasingSpeed = 50;
-const newTextDelay = 2000; // Jeda sebelum ngetik kata baru
+const btn = document.getElementById('actionBtn');
+const card = document.getElementById('profileCard');
 
-const typingElement = document.querySelector(".typing-text");
-
-function type() {
-    if (charIndex < textArray[textIndex].length) {
-        typingElement.textContent += textArray[textIndex].charAt(charIndex);
-        charIndex++;
-        setTimeout(type, typingSpeed);
-    } else {
-        setTimeout(erase, newTextDelay);
-    }
-}
-
-function erase() {
-    if (charIndex > 0) {
-        typingElement.textContent = textArray[textIndex].substring(0, charIndex - 1);
-        charIndex--;
-        setTimeout(erase, erasingSpeed);
-    } else {
-        textIndex++;
-        if (textIndex >= textArray.length) textIndex = 0;
-        setTimeout(type, typingSpeed + 1100);
-    }
-}
-
-// Mulai animasi pas halaman selesai dimuat
-document.addEventListener("DOMContentLoaded", function() {
-    if(textArray.length) setTimeout(type, newTextDelay + 250);
+btn.addEventListener('click', () => {
+    // Memberikan feedback visual sederhana
+    card.style.backgroundColor = '#e8f4ff';
+    btn.textContent = 'Message Sent!';
+    btn.style.backgroundColor = '#4a90e2';
+    
+    // Reset setelah 2 detik
+    setTimeout(() => {
+        card.style.backgroundColor = 'white';
+        btn.textContent = 'Say Hello!';
+        btn.style.backgroundColor = '#333';
+    }, 2000);
 });

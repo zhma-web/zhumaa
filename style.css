@@ -1,60 +1,59 @@
-.nav-menu {
-    margin-top: 25px;
+body {
     display: flex;
     justify-content: center;
-    gap: 30px; /* Kasih jarak biar adem */
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.nav-menu a {
-    text-decoration: none;
-    color: #636e72; /* Warna abu-abu kebiruan (adem) */
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: 0.3s;
-    padding-bottom: 5px;
-    border-bottom: 2px solid transparent;
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: transform 0.3s ease;
+    width: 280px;
 }
-.nav-menu {
-    margin-top: 25px;
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    background: #4a90e2;
+    color: white;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 15px; /* Jarak antar tombol */
+    font-size: 2rem;
+    font-weight: bold;
 }
 
-.nav-menu a {
-    text-decoration: none;
-    color: #fff; /* Teks putih biar kontras */
-    background-color: #007bff; /* Biru ceria */
-    padding: 10px 20px; /* Bikin link jadi kotak/tombol */
-    border-radius: 20px; /* Bikin ujungnya melengkung */
-    font-weight: 500;
-    transition: 0.3s;
-    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
-}
+h2 { margin: 0.5rem 0; color: #333; }
+.role { color: #888; font-size: 0.9rem; margin-bottom: 1.5rem; }
 
-.nav-menu a:hover {
-    background-color: #0056b3; /* Biru lebih gelap saat disentuh */
-    transform: translateY(-2px); /* Tombol sedikit "terangkat" pas di-hover */
-}
-
-.tagline {
-    font-size: 1.1rem;
-    color: #007bff;
+button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
     font-weight: 600;
-    margin-bottom: 20px;
-    min-height: 25px; /* Biar layout gak lompat pas teks dihapus */
 }
 
-.cursor {
-    display: inline-block;
-    width: 3px;
-    background-color: #007bff;
-    margin-left: 2px;
-    animation: blink 1s infinite;
+:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --accent: #4a90e2;
 }
 
-@keyframes blink {
-    0% { background-color: transparent; }
-    50% { background-color: #007bff; }
-    100% { background-color: transparent; }
-}
+body { background-color: var(--bg-color); color: var(--text-color); }
