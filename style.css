@@ -83,7 +83,7 @@ body {
     /* Animasi masuk untuk kartu itu sendiri */
     opacity: 0;
     transform: translateY(20px); /* Mulai dari sedikit di bawah */
-    animation: slideInCard 0.8s ease-out 0.4s forwards; /* Panggil animasi dengan delay */
+    animation: fadeincard 0.8s ease-out 0.4s forwards; /* Panggil animasi dengan delay */
 }
 
 /* 3. Definisi Animasi (Keyframes) */
@@ -96,7 +96,7 @@ body {
 }
 
 /* Animasi untuk memunculkan kartu dengan efek slide-up */
-@keyframes slideInCard {
+@keyframes fideInCard {
     to {
         opacity: 1;
         transform: translateY(0); /* Kembali ke posisi asli */
