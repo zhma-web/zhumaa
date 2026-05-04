@@ -3,285 +3,237 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>zyluxx • digital explorer</title>
+  <title>zhumaa</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   
   <style>
-    :root {
-      --primary: #00ff9d;
-    }
+    body { font-family: 'Inter', sans-serif; cursor: none; }
+    .title-font { font-family: 'Space Grotesk', sans-serif; }
     
-    body {
-      font-family: 'Inter', sans-serif;
+    .custom-cursor {
+      position: fixed; width: 26px; height: 26px; border: 2px solid #00ff9d;
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      mix-blend-mode: difference; display: none;
     }
-    .title-font {
-      font-family: 'Space Grotesk', sans-serif;
-    }
+    .custom-cursor.active { width: 80px; height: 80px; background: rgba(0,255,157,0.15); }
 
-    .hero-bg {
-      background: radial-gradient(circle at 50% 20%, rgba(0, 255, 157, 0.18) 0%, transparent 60%);
-    }
-
-    .glass {
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(24px);
-    }
-
-    .neon-text {
-      text-shadow: 0 0 20px rgb(0 255 157),
-                   0 0 40px rgb(0 255 157);
-    }
-
-    .project-card {
-      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .project-card:hover {
-      transform: translateY(-20px) scale(1.04);
-      box-shadow: 0 30px 60px -15px rgb(0 255 157 / 0.3);
-    }
+    .neon-glow { text-shadow: 0 0 20px #00ff9d, 0 0 40px #00ff9d, 0 0 80px #00ff9d; }
   </style>
 </head>
-<body class="bg-zinc-950 text-white overflow-x-hidden">
+<body class="bg-zinc-950 text-white">
+
+  <!-- Custom Cursor -->
+  <div id="cursor" class="custom-cursor hidden md:block"></div>
 
   <!-- Navbar -->
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div onclick="toggleTheme()" class="w-8 h-8 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center text-black font-bold text-2xl cursor-pointer hover:rotate-12 transition">z</div>
-        <span class="title-font text-3xl tracking-tighter font-semibold">zyluxx</span>
+  <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div onclick="switchMode()" class="flex items-center gap-3 cursor-pointer">
+        <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 via-cyan-400 to-violet-400 rounded-3xl flex items-center justify-center text-3xl font-black">z</div>
+        <span class="title-font text-3xl tracking-tighter font-bold">zhuma</span>
       </div>
-
-      <div class="hidden md:flex items-center gap-10 text-sm">
-        <a href="#about" class="nav-link hover:text-emerald-400 transition">About</a>
-        <a href="#work" class="nav-link hover:text-emerald-400 transition">Work</a>
-        <a href="#lab" class="nav-link hover:text-emerald-400 transition">Lab</a>
-        <a href="#contact" class="nav-link hover:text-emerald-400 transition">Contact</a>
+      
+      <div class="hidden md:flex gap-10 text-sm">
+        <a href="#about" class="hover:text-emerald-400">ABOUT</a>
+        <a href="#work" class="hover:text-emerald-400">WORK</a>
+        <a href="#lab" class="hover:text-emerald-400">LAB</a>
+        <a href="#contact" class="hover:text-emerald-400">CONTACT</a>
       </div>
-
-      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl">
-        <i class="fa-solid fa-bars"></i>
-      </button>
+      
+      <button onclick="toggleMusic()" class="text-xl"><i class="fa-solid fa-music"></i></button>
     </div>
   </nav>
 
-  <!-- Hero with Particle Background -->
-  <section class="hero-bg min-h-screen flex items-center relative">
-    <canvas id="particleCanvas" class="absolute inset-0 z-0"></canvas>
+  <!-- Hero with Three.js -->
+  <section class="min-h-screen relative flex items-center overflow-hidden">
+    <div id="threeContainer" class="absolute inset-0"></div>
     
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10 pt-20">
-      <div class="space-y-8">
-        <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-emerald-400/30 rounded-full text-sm backdrop-blur">
-          <span class="relative flex h-3 w-3">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-400"></span>
-          </span>
-          OPEN FOR FREELANCE • 2026
-        </div>
-
-        <h1 class="text-7xl md:text-8xl title-font font-bold tracking-tighter leading-none neon-text">
-          I'm <span class="text-emerald-400">ZYLUXX</span>
-        </h1>
-
-        <div class="text-3xl text-zinc-300">
-          Crafting <span id="typewriter" class="text-emerald-400 font-medium"></span>
-        </div>
-
-        <p class="max-w-md text-lg text-zinc-400">
-          Digital artist &amp; frontend sorcerer from Semarang.<br>
-          Turning caffeine into beautiful, alive websites.
-        </p>
-
-        <div class="flex flex-wrap gap-4">
-          <a href="#work" class="px-8 py-5 bg-emerald-400 text-black font-semibold rounded-3xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all text-lg">
-            Explore My Magic
-            <i class="fa-solid fa-arrow-right"></i>
-          </a>
-          <a href="#contact" class="px-8 py-5 border-2 border-white/30 hover:border-emerald-400 rounded-3xl font-medium transition-all">
-            Say Hello
-          </a>
-        </div>
-      </div>
-
-      <div class="relative flex justify-center">
-        <div class="w-80 h-80 md:w-[420px] md:h-[420px] relative">
-          <div class="absolute inset-0 bg-emerald-400/10 rounded-[4rem] blur-3xl"></div>
-          <img src="https://picsum.photos/id/1015/800/800" 
-               class="w-full h-full object-cover rounded-[3rem] border border-white/10 shadow-2xl" alt="zyluxx">
+    <div class="max-w-7xl mx-auto px-6 relative z-10 pt-20">
+      <div class="grid md:grid-cols-12 gap-12 items-center">
+        <div class="md:col-span-7 space-y-8">
+          <div class="inline-flex items-center gap-3 px-6 py-3 border border-emerald-400/30 rounded-3xl bg-white/5">
+            <span class="text-emerald-400 animate-pulse">●</span>
+            <span class="text-sm tracking-widest">LIVE FROM CENTRAL JAVA</span>
+          </div>
           
-          <div class="absolute -bottom-6 -right-6 glass px-6 py-4 rounded-3xl border border-emerald-400/30">
-            <div class="flex items-center gap-4">
-              <i class="fa-solid fa-bolt text-3xl text-yellow-400"></i>
-              <div>
-                <div class="text-sm">Currently Vibing</div>
-                <div class="font-mono text-emerald-400">Lo-fi + Code</div>
-              </div>
-            </div>
+          <h1 class="text-7xl md:text-8xl title-font font-bold leading-none neon-glow">
+            I AM<br>ZHUMA
+          </h1>
+          
+          <div class="text-4xl text-zinc-300" id="typewriter"></div>
+          
+          <p class="max-w-lg text-zinc-400 text-lg">
+            Frontend sorcerer • 3D artist • Experience designer<br>
+            Creating digital worlds that feel alive.
+          </p>
+          
+          <div class="flex gap-6">
+            <button onclick="document.getElementById('work').scrollIntoView({behavior:'smooth'})" 
+                    class="px-10 py-6 bg-white text-black rounded-3xl text-xl font-semibold hover:bg-emerald-400 transition-all magnetic">
+              ENTER THE LAB
+            </button>
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" 
+                    class="px-10 py-6 border-2 border-white/50 hover:border-emerald-400 rounded-3xl text-xl transition-all magnetic">
+              CONNECT
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="absolute bottom-10 left-1/2 flex flex-col items-center text-xs tracking-widest opacity-60">
-      SCROLL FOR MAGIC
-      <div class="w-6 h-10 border-2 border-white/40 rounded-full mt-3 flex items-center justify-center">
-        <div class="w-1 h-2 bg-white rounded-full animate-bounce"></div>
-      </div>
-    </div>
   </section>
 
-  <!-- About, Work, Lab, Contact sections tetap mirip tapi lebih keren -->
-  <!-- (Saya ringkas biar tidak terlalu panjang) -->
-
-  <section id="about" class="py-32">
-    <div class="max-w-7xl mx-auto px-6">
-      <h2 class="title-font text-6xl font-bold text-center mb-20">The Story So Far</h2>
-      <!-- Isi about kamu bisa tambah di sini -->
-      <p class="max-w-2xl mx-auto text-center text-xl text-zinc-300 leading-relaxed">
-        Obsessed with clean code, buttery animations, and making the internet feel alive.
-      </p>
-    </div>
-  </section>
-
-  <!-- Work Section (lebih OP) -->
+  <!-- Work -->
   <section id="work" class="py-32 bg-black">
     <div class="max-w-7xl mx-auto px-6">
-      <h2 class="title-font text-6xl font-bold mb-16">Selected Works</h2>
-      <div class="grid md:grid-cols-2 gap-10">
-        <div class="project-card bg-zinc-900 rounded-3xl overflow-hidden">
-          <div class="h-96 bg-zinc-800 relative overflow-hidden">
-            <img src="https://picsum.photos/id/201/1200/800" class="w-full h-full object-cover transition-all duration-700 hover:scale-110">
+      <h2 class="text-7xl title-font font-bold text-center mb-20">Digital Realms</h2>
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="group rounded-3xl overflow-hidden bg-zinc-900">
+          <div class="h-96 bg-zinc-800 relative">
+            <img src="https://picsum.photos/id/1015/800/800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
           </div>
           <div class="p-8">
-            <span class="text-emerald-400 text-sm">2026 • BRANDING</span>
-            <h3 class="text-4xl title-font mt-3">Nusantara Collective</h3>
+            <p class="text-emerald-400">2026 • 3D INTERACTIVE</p>
+            <h3 class="text-4xl title-font mt-2">Nusantara Realm</h3>
           </div>
         </div>
-        
-        <div class="project-card bg-zinc-900 rounded-3xl overflow-hidden">
-          <div class="h-96 bg-zinc-800 relative overflow-hidden">
-            <img src="https://picsum.photos/id/237/1200/800" class="w-full h-full object-cover transition-all duration-700 hover:scale-110">
+        <div class="group rounded-3xl overflow-hidden bg-zinc-900">
+          <div class="h-96 bg-zinc-800 relative">
+            <img src="https://picsum.photos/id/866/800/800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
           </div>
           <div class="p-8">
-            <span class="text-emerald-400 text-sm">2026 • SAAS</span>
-            <h3 class="text-4xl title-font mt-3">Flowstate Dashboard</h3>
+            <p class="text-emerald-400">2026 • SAAS</p>
+            <h3 class="text-4xl title-font mt-2">Void Dashboard</h3>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="py-12 text-center text-zinc-500 text-sm">
-    © 2026 zyluxx • Built with passion in Semarang, Indonesia
+  <!-- Contact -->
+  <section id="contact" class="py-32">
+    <div class="max-w-4xl mx-auto text-center px-6">
+      <h2 class="text-6xl md:text-7xl title-font font-bold mb-10">Ready to create<br>something eternal?</h2>
+      <a href="mailto:hello@zyluxx.dev" class="text-4xl hover:text-emerald-400 inline-flex items-center gap-4">
+        hello@zyluxx.dev <span class="text-6xl">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <footer class="py-12 text-center text-xs text-zinc-500">
+    © 2026 zyluxx • Built different in Semarang, Indonesia
   </footer>
 
   <script>
-    // Particle Background
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    if (window.innerWidth > 1024) cursor.style.display = 'block';
     
-    let particles = [];
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2.5 + 0.5;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.5 - 0.25;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-      }
-      draw() {
-        ctx.fillStyle = 'rgba(0, 255, 157, 0.6)';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    
-    function initParticles() {
-      particles = [];
-      for (let i = 0; i < 120; i++) {
-        particles.push(new Particle());
-      }
-    }
-    
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let p of particles) {
-        p.update();
-        p.draw();
-      }
-      requestAnimationFrame(animateParticles);
-    }
-    
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      initParticles();
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
     });
 
+    // Three.js Scene
+    let scene, camera, renderer, torus;
+    function initThree() {
+      const container = document.getElementById('threeContainer');
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const geometry = new THREE.TorusKnotGeometry(3, 1, 128, 32);
+      const material = new THREE.MeshPhongMaterial({ 
+        color: 0x00ff9d, 
+        emissive: 0x00ff9d,
+        shininess: 100,
+        specular: 0xffffff
+      });
+      torus = new THREE.Mesh(geometry, material);
+      scene.add(torus);
+
+      const light = new THREE.PointLight(0xffffff, 2, 100);
+      light.position.set(10, 10, 10);
+      scene.add(light);
+      scene.add(new THREE.AmbientLight(0x404040));
+
+      camera.position.z = 12;
+
+      function animateThree() {
+        requestAnimationFrame(animateThree);
+        torus.rotation.x += 0.005;
+        torus.rotation.y += 0.008;
+        renderer.render(scene, camera);
+      }
+      animateThree();
+    }
+
     // Typewriter
-    const texts = ["immersive experiences", "pixel magic", "digital dreams", "future interfaces"];
-    let count = 0, index = 0;
+    const phrases = ["digital worlds.", "immersive experiences.", "pixel sorcery.", "future interfaces."];
+    let idx = 0, char = 0;
     function typewriter() {
       const el = document.getElementById('typewriter');
-      const current = texts[count];
-      el.textContent = current.slice(0, ++index);
-      
-      if (index === current.length) {
-        setTimeout(() => {
-          count = (count + 1) % texts.length;
-          index = 0;
-          typewriter();
-        }, 1800);
+      const text = phrases[idx];
+      el.textContent = text.substring(0, char++);
+      if (char > text.length) {
+        setTimeout(() => { idx = (idx + 1) % phrases.length; char = 0; typewriter(); }, 2000);
       } else {
-        setTimeout(typewriter, 60);
+        setTimeout(typewriter, 70);
       }
     }
 
-    // GSAP Scroll Animation
-    function initGSAP() {
-      gsap.from(".project-card", {
-        y: 100,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-        scrollTrigger: { trigger: "#work", start: "top 70%" }
+    // Magnetic Buttons
+    document.querySelectorAll('.magnetic').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width/2) * 0.4;
+        const y = (e.clientY - rect.top - rect.height/2) * 0.4;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
       });
+      btn.addEventListener('mouseleave', () => btn.style.transform = '');
+    });
+
+    // Simple Background Music Toggle
+    let audio;
+    function toggleMusic() {
+      if (!audio) {
+        audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+        audio.loop = true;
+      }
+      audio.paused ? audio.play() : audio.pause();
     }
 
-    // Mobile Menu
-    function toggleMobileMenu() {
-      alert("Mobile menu coming in next upgrade 🔥");
+    // Neon Mode
+    function switchMode() {
+      document.documentElement.classList.toggle('neon');
+      alert("GOD MODE NEON ACTIVATED ✨");
     }
 
-    // Theme Toggle (Neon Mode)
-    function toggleTheme() {
-      document.documentElement.classList.toggle('dark');
-      alert("Neon mode activated! (lebih OP lagi next version)");
-    }
-
-    // Init everything
+    // Initialize Everything
     window.onload = () => {
-      resizeCanvas();
-      initParticles();
-      animateParticles();
+      initThree();
       typewriter();
-      initGSAP();
       
-      console.log('%c🚀 zyluxx v2.0 — ULTRA OP MODE ACTIVATED', 'color:#00ff9d; font-size:14px; font-family:monospace');
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.from("#work > div", { y: 100, opacity: 0, duration: 1.2, scrollTrigger: "#work" });
+
+      console.log('%cLEVEL 4 — GOD MODE ENABLED', 'color:#00ff9d; font-size:18px; font-family:monospace');
     };
+
+    window.addEventListener('resize', () => {
+      if (renderer) {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      }
+    });
   </script>
 </body>
 </html>
