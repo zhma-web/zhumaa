@@ -1,1285 +1,1259 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZHUMA</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Lora:ital@0;1&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>PsycheSpace — Ruang Aman untuk Tumbuh</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ════════════════════════════════════════
-   THEME VARIABLES
-════════════════════════════════════════ */
-[data-theme="dark"] {
-  --bg:      #070610;
-  --s1:      #0e0c1c;
-  --s2:      #151228;
-  --s3:      #1e1a34;
-  --s4:      #272340;
-  --bd:      rgba(255,255,255,.06);
-  --bd2:     rgba(255,255,255,.11);
-  --bd3:     rgba(255,255,255,.18);
-  --p:       #7c4dff;
-  --p2:      #a07cff;
-  --p3:      #c9b8ff;
-  --pink:    #f06292;
-  --gold:    #ffca28;
-  --green:   #4caf8a;
-  --red:     #ef5350;
-  --cyan:    #26c6da;
-  --w:       #edeaff;
-  --w2:      #b0a8d8;
-  --w3:      #7068a0;
-  --w4:      #3d3660;
-  --shadow:  rgba(0,0,0,.6);
-  --glow:    rgba(124,77,255,.18);
-}
-[data-theme="light"] {
-  --bg:      #f5f3ff;
-  --s1:      #ffffff;
-  --s2:      #f0eeff;
-  --s3:      #e8e4ff;
-  --s4:      #ddd8ff;
-  --bd:      rgba(100,80,220,.1);
-  --bd2:     rgba(100,80,220,.18);
-  --bd3:     rgba(100,80,220,.28);
-  --p:       #6c3de8;
-  --p2:      #8b5cf6;
-  --p3:      #4c1d95;
-  --pink:    #e91e8c;
-  --gold:    #f59e0b;
-  --green:   #059669;
-  --red:     #dc2626;
-  --cyan:    #0891b2;
-  --w:       #1a1040;
-  --w2:      #3d3070;
-  --w3:      #7060a8;
-  --w4:      #b0a8d8;
-  --shadow:  rgba(100,80,220,.12);
-  --glow:    rgba(108,61,232,.1);
+/* ============================
+   DESIGN TOKENS
+   ============================ */
+:root {
+  --plum-deep:    #1A0F2E;
+  --plum:         #2D1B4E;
+  --violet:       #5C3D8F;
+  --violet-mid:   #7B5EA7;
+  --lavender:     #9B72CF;
+  --lilac:        #C9AAFF;
+  --mist:         #EDE6FB;
+  --peach:        #F9C5D1;
+  --mint:         #A8E6CF;
+  --white:        #FAFAF9;
+  --glass:        rgba(255,255,255,0.07);
+  --glass-hover:  rgba(255,255,255,0.12);
+  --glass-border: rgba(201,170,255,0.2);
+  --shadow-soft:  0 8px 40px rgba(92,61,143,0.25);
+  --shadow-glow:  0 0 60px rgba(155,114,207,0.2);
+  --radius-lg:    24px;
+  --radius-md:    16px;
+  --radius-sm:    10px;
+  --transition:   0.3s cubic-bezier(0.4,0,0.2,1);
 }
 
-/* ════════════════════════════════════════
-   BASE
-════════════════════════════════════════ */
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { height:100%; }
+/* ============================
+   RESET & BASE
+   ============================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
 body {
-  height:100%; background:var(--bg); color:var(--w);
-  font-family:'Bricolage Grotesque',sans-serif;
-  overflow:hidden; transition:background .3s,color .3s;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--plum-deep);
+  color: var(--white);
+  overflow-x: hidden;
+  min-height: 100vh;
 }
+img { max-width:100%; }
 a { text-decoration:none; color:inherit; }
-button { font-family:'Bricolage Grotesque',sans-serif; }
-textarea,input,select { font-family:'Bricolage Grotesque',sans-serif; }
+button { font-family:inherit; }
 
-/* scrollbar */
-* { scrollbar-width:thin; scrollbar-color:var(--s4) transparent; }
-::-webkit-scrollbar { width:3px; height:3px; }
-::-webkit-scrollbar-thumb { background:var(--s4); border-radius:99px; }
+/* Scrollbar */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--plum-deep); }
+::-webkit-scrollbar-thumb { background:var(--violet); border-radius:999px; }
 
-/* ════════════════════════════════════════
-   AMBIENT (dark only)
-════════════════════════════════════════ */
-#amb {
-  position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;
-  opacity:1; transition:opacity .4s;
-}
-[data-theme="light"] #amb { opacity:0; }
-.amb { position:absolute; border-radius:50%; filter:blur(90px); }
-.a1 { width:700px;height:700px;top:-20%;left:-15%;background:radial-gradient(circle,rgba(124,77,255,.14),transparent 60%);animation:af 22s ease-in-out infinite; }
-.a2 { width:500px;height:500px;bottom:-15%;right:-10%;background:radial-gradient(circle,rgba(160,124,255,.09),transparent 60%);animation:af 28s ease-in-out infinite reverse; }
-.a3 { width:350px;height:350px;top:40%;left:30%;background:radial-gradient(circle,rgba(240,98,146,.06),transparent 60%);animation:af 19s ease-in-out infinite 5s; }
-@keyframes af { 0%,100%{transform:translate(0,0)}40%{transform:translate(28px,-28px)}70%{transform:translate(-20px,20px)} }
-
-/* ════════════════════════════════════════
-   LOADER
-════════════════════════════════════════ */
+/* ============================
+   LOADING SCREEN
+   ============================ */
 #loader {
-  position:fixed; inset:0; z-index:9999;
-  background:var(--bg); display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:22px;
-  transition:opacity .45s;
+  position: fixed; inset:0;
+  background: var(--plum-deep);
+  z-index: 9999;
+  display: flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:1.5rem;
+  transition: opacity 0.6s, transform 0.6s;
 }
-.ld-logo {
-  font-size:44px; font-weight:800; letter-spacing:-.03em;
-  background:linear-gradient(135deg,var(--w) 20%,var(--p2) 70%,var(--pink));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+#loader.hide { opacity:0; pointer-events:none; transform:scale(1.05); }
+.loader-logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.2rem;
+  color: var(--lilac);
+  letter-spacing:0.05em;
 }
-.ld-track { width:100px; height:2px; background:var(--s3); border-radius:99px; overflow:hidden; }
-.ld-bar { height:100%; width:0; background:linear-gradient(90deg,var(--p),var(--p2),var(--pink)); animation:ldBar 2s cubic-bezier(.4,0,.2,1) forwards; }
-@keyframes ldBar { to { width:100%; } }
+.loader-bar {
+  width:180px; height:2px;
+  background: rgba(255,255,255,0.1);
+  border-radius:999px;
+  overflow:hidden;
+}
+.loader-fill {
+  height:100%;
+  background: linear-gradient(90deg, var(--violet), var(--lilac));
+  border-radius:999px;
+  animation: loadFill 1.8s ease forwards;
+}
+@keyframes loadFill { from{width:0} to{width:100%} }
+.loader-text { color:rgba(255,255,255,0.35); font-size:0.8rem; letter-spacing:0.1em; }
 
-/* ════════════════════════════════════════
-   TOAST
-════════════════════════════════════════ */
-#toasts { position:fixed; top:16px; right:16px; z-index:8888; display:flex; flex-direction:column; gap:8px; }
-.t {
-  display:flex; align-items:center; gap:9px;
-  background:var(--s2); border:1px solid var(--bd2);
-  border-radius:10px; padding:11px 16px;
-  font-size:13px; font-weight:500; color:var(--w);
-  box-shadow:0 8px 28px var(--shadow); max-width:280px;
-  animation:tIn .25s ease;
-}
-.t.ok  { border-color:rgba(76,175,138,.35); }
-.t.err { border-color:rgba(239,83,80,.35); }
-.t.info { border-color:var(--bd3); }
-@keyframes tIn { from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)} }
-
-/* ════════════════════════════════════════
-   AUTH
-════════════════════════════════════════ */
-#auth {
-  display:none; min-height:100vh; position:relative; z-index:1;
-  align-items:center; justify-content:center; padding:20px;
-}
-.ac {
-  width:100%; max-width:400px;
-  background:var(--s1); border:1px solid var(--bd2);
-  border-radius:22px; padding:38px 34px;
-  box-shadow:0 24px 80px var(--shadow); position:relative; overflow:hidden;
-}
-.ac::before {
-  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
-  width:55%; height:1px; background:linear-gradient(90deg,transparent,var(--p2),transparent);
-}
-.ac-logo {
-  font-size:26px; font-weight:800; letter-spacing:-.02em; margin-bottom:5px;
-  background:linear-gradient(135deg,var(--w),var(--p2));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.ac-sub { font-size:13px; color:var(--w3); margin-bottom:26px; }
-
-.segs { display:flex; background:var(--s2); border-radius:10px; padding:3px; margin-bottom:22px; }
-.seg { flex:1; padding:9px; border:none; background:transparent; cursor:pointer; font-weight:600; font-size:13px; color:var(--w3); border-radius:8px; transition:all .2s; }
-.seg.on { background:var(--s3); color:var(--w); box-shadow:0 1px 6px var(--shadow); }
-
-.fi { display:flex; flex-direction:column; gap:5px; margin-bottom:12px; }
-.fl { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--w3); }
-.inp {
-  background:var(--s2); border:1px solid var(--bd); border-radius:8px;
-  color:var(--w); font-size:14px; padding:11px 14px; outline:none; transition:all .2s; width:100%;
-}
-.inp:focus { border-color:var(--p); box-shadow:0 0 0 3px var(--glow); }
-.inp::placeholder { color:var(--w4); }
-
-.tgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
-.tc {
-  border:1px solid var(--bd); border-radius:8px; background:var(--s2);
-  padding:12px 6px; text-align:center; cursor:pointer; transition:all .2s;
-}
-.tc.on { border-color:var(--p); background:rgba(124,77,255,.12); }
-.tc-em { font-size:20px; display:block; margin-bottom:5px; }
-.tc-lb { font-size:11px; font-weight:700; color:var(--w3); }
-.tc.on .tc-lb { color:var(--p2); }
-
-.btn-p {
-  width:100%; background:linear-gradient(135deg,var(--p),var(--p2));
-  color:#fff; border:none; padding:13px; border-radius:99px;
-  font-weight:700; font-size:14px; cursor:pointer; transition:all .25s; margin-top:6px;
-}
-.btn-p:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 10px 28px var(--glow); }
-.btn-p:disabled { opacity:.4; cursor:not-allowed; transform:none; }
-
-/* ════════════════════════════════════════
-   APP SHELL
-════════════════════════════════════════ */
-#app { display:none; height:100vh; }
-#app.on { display:grid; grid-template-columns:240px 1fr 272px; }
-
-/* ════════════════════════════════════════
-   LEFT SIDEBAR
-════════════════════════════════════════ */
-#sb {
-  background:var(--s1); border-right:1px solid var(--bd);
-  height:100vh; display:flex; flex-direction:column;
-  transition:background .3s;
-}
-.sb-head { padding:18px 18px 14px; border-bottom:1px solid var(--bd); }
-.sb-logo {
-  font-size:21px; font-weight:800; letter-spacing:-.02em;
-  background:linear-gradient(135deg,var(--w),var(--p2));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+/* ============================
+   CUSTOM CURSOR (desktop only)
+   ============================ */
+@media(hover:hover) {
+  body { cursor:none; }
+  .cursor, .cursor-ring { position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); border-radius:50%; }
+  .cursor { width:10px;height:10px;background:var(--lilac);transition:width .2s,height .2s,background .2s;mix-blend-mode:screen; }
+  .cursor-ring { width:34px;height:34px;border:1.5px solid rgba(201,170,255,0.5);transition:all .15s ease;top:0;left:0; }
+  .cursor.link { width:20px;height:20px;background:var(--lavender); }
+  .cursor-ring.link { width:50px;height:50px;border-color:var(--lilac); }
 }
 
-/* Search bar */
-.sb-search { padding:10px 12px; border-bottom:1px solid var(--bd); }
-.search-wrap { position:relative; }
-.search-ic { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:14px; pointer-events:none; }
-.search-inp {
-  width:100%; background:var(--s2); border:1px solid var(--bd);
-  border-radius:99px; color:var(--w); font-size:13px;
-  padding:8px 14px 8px 34px; outline:none; transition:all .2s;
+/* ============================
+   BACKGROUND
+   ============================ */
+.bg-wrap { position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none; }
+.bg-blob {
+  position:absolute; border-radius:50%; filter:blur(90px); opacity:0.12;
+  animation: blobDrift 18s ease-in-out infinite;
 }
-.search-inp:focus { border-color:var(--p); background:var(--s3); }
-.search-inp::placeholder { color:var(--w4); }
-.search-results {
-  position:absolute; top:calc(100% + 6px); left:0; right:0;
-  background:var(--s2); border:1px solid var(--bd2);
-  border-radius:12px; box-shadow:0 12px 32px var(--shadow);
-  z-index:100; overflow:hidden; display:none;
+.blob1{width:700px;height:700px;background:var(--violet);top:-200px;left:-200px;}
+.blob2{width:500px;height:500px;background:var(--lavender);bottom:-100px;right:-150px;animation-delay:-7s;}
+.blob3{width:350px;height:350px;background:#7C3AED;top:45%;left:35%;animation-delay:-12s;}
+@keyframes blobDrift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px)scale(1.08)}66%{transform:translate(-25px,20px)scale(0.94)}}
+
+/* Grain overlay */
+.grain {
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-.search-results.open { display:block; }
-.sr-item {
-  display:flex; align-items:center; gap:10px;
-  padding:10px 14px; cursor:pointer; transition:background .15s;
+
+/* ============================
+   LAYOUT
+   ============================ */
+.container { max-width:1180px; margin:0 auto; padding:0 2rem; }
+.section-wrap { position:relative; z-index:2; }
+
+/* ============================
+   NAVIGATION
+   ============================ */
+#nav {
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:1.2rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  backdrop-filter:blur(24px);
+  background:rgba(20,10,42,0.7);
+  border-bottom:1px solid var(--glass-border);
+  transition: padding var(--transition);
 }
-.sr-item:hover { background:var(--s3); }
-.sr-av {
-  width:32px; height:32px; border-radius:50%; flex-shrink:0;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  display:flex; align-items:center; justify-content:center;
-  font-weight:700; font-size:12px; color:#fff; overflow:hidden;
+#nav.scrolled { padding:0.9rem 2rem; }
+.nav-logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;
+  font-weight:600;
+  color:var(--lilac);
+  letter-spacing:0.04em;
+  display:flex;align-items:center;gap:0.5rem;
 }
-.sr-av img { width:100%; height:100%; object-fit:cover; }
-.sr-name { font-size:13px; font-weight:600; color:var(--w); }
-.sr-handle { font-size:11px; color:var(--w3); }
-
-.sb-nav { flex:1; overflow-y:auto; padding:8px 10px; }
-.nb {
-  display:flex; align-items:center; gap:10px; width:100%;
-  padding:10px 12px; border:none; background:transparent;
-  border-radius:10px; cursor:pointer; transition:all .2s;
-  font-size:14px; font-weight:600; color:var(--w3); text-align:left; margin-bottom:2px;
+.nav-logo .dot { width:7px;height:7px;background:var(--lavender);border-radius:50%;display:inline-block;animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.nav-center { display:flex;gap:0.25rem; }
+.nav-link {
+  padding:0.45rem 1rem;
+  color:rgba(255,255,255,0.6);
+  font-size:0.82rem;
+  letter-spacing:0.03em;
+  border-radius:999px;
+  transition:all var(--transition);
 }
-.nb:hover { background:var(--s2); color:var(--w); }
-.nb.on { background:rgba(124,77,255,.14); color:var(--p2); }
-.nb-ic { font-size:17px; width:21px; text-align:center; flex-shrink:0; }
-
-.sb-foot { padding:12px; border-top:1px solid var(--bd); }
-.me-row { display:flex; align-items:center; gap:10px; padding:8px; border-radius:10px; cursor:pointer; transition:background .15s; }
-.me-row:hover { background:var(--s2); }
-.me-av {
-  width:34px; height:34px; border-radius:50%; flex-shrink:0; overflow:hidden;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:13px; color:#fff;
+.nav-link:hover,.nav-link.active{background:var(--glass);color:var(--lilac);}
+.nav-right { display:flex;align-items:center;gap:0.8rem; }
+.nav-btn {
+  background:linear-gradient(135deg,var(--violet),var(--lavender));
+  color:white;
+  padding:0.5rem 1.3rem;
+  border-radius:999px;
+  font-size:0.82rem;
+  font-weight:600;
+  border:none;cursor:pointer;
+  box-shadow:0 2px 20px rgba(92,61,143,0.4);
+  transition:transform var(--transition),box-shadow var(--transition);
 }
-.me-av img { width:100%; height:100%; object-fit:cover; }
-.me-name { font-size:13px; font-weight:700; color:var(--w); }
-.me-handle { font-size:11px; color:var(--w3); }
-.me-out { margin-left:auto; background:none; border:none; cursor:pointer; color:var(--w4); font-size:16px; padding:4px; border-radius:6px; transition:all .2s; }
-.me-out:hover { color:var(--red); background:rgba(239,83,80,.1); }
+.nav-btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(92,61,143,0.6);}
 
-/* ════════════════════════════════════════
-   MAIN CONTENT
-════════════════════════════════════════ */
-#main { height:100vh; display:flex; flex-direction:column; overflow:hidden; }
-.topbar {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:14px 20px; border-bottom:1px solid var(--bd);
-  background:rgba(7,6,16,.75); backdrop-filter:blur(16px);
-  flex-shrink:0;
+/* Hamburger */
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; background:none; border:none; }
+.hamburger span { display:block; width:24px; height:2px; background:var(--lilac); border-radius:2px; transition:all var(--transition); }
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;transform:translateX(-8px);}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+
+/* Mobile menu */
+.mobile-menu {
+  display:none;
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(18,8,38,0.97);
+  z-index:450;
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:0.5rem;
+  backdrop-filter:blur(30px);
+  opacity:0;pointer-events:none;
+  transition:opacity var(--transition);
 }
-[data-theme="light"] .topbar { background:rgba(245,243,255,.85); }
-.tb-title { font-size:17px; font-weight:800; color:var(--w); }
-.tb-right { display:flex; align-items:center; gap:8px; }
-
-/* Theme toggle */
-.theme-btn {
-  width:36px; height:36px; border-radius:99px; border:1px solid var(--bd2);
-  background:var(--s2); cursor:pointer; display:flex; align-items:center; justify-content:center;
-  font-size:16px; transition:all .2s; color:var(--w2);
+.mobile-menu.open{opacity:1;pointer-events:all;display:flex;}
+.mobile-menu a {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem; color:rgba(255,255,255,0.7);
+  padding:0.6rem 2rem; border-radius:var(--radius-md);
+  transition:all var(--transition);
 }
-.theme-btn:hover { border-color:var(--p2); background:var(--s3); }
+.mobile-menu a:hover{color:var(--lilac);background:var(--glass);}
+.mobile-menu-close{position:absolute;top:1.5rem;right:1.5rem;background:var(--glass);border:1px solid var(--glass-border);color:var(--lilac);width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;}
 
-.feed-wrap { flex:1; overflow-y:auto; overflow-x:hidden; }
-
-/* pages */
-.pg { display:none; }
-.pg.on { display:block; }
-
-/* ════════════════════════════════════════
-   COMPOSER
-════════════════════════════════════════ */
-.composer {
-  padding:16px 20px; border-bottom:1px solid var(--bd);
-  background:var(--s1); display:flex; gap:11px;
+/* ============================
+   MOOD CHECK-IN BANNER
+   ============================ */
+#mood-banner {
+  position:relative;z-index:2;
+  margin-top:75px;
+  background:linear-gradient(135deg,rgba(92,61,143,0.3),rgba(155,114,207,0.15));
+  border-bottom:1px solid var(--glass-border);
+  padding:0.75rem 2rem;
+  display:flex;align-items:center;justify-content:center;gap:1.5rem;
+  flex-wrap:wrap;
 }
-.co-av {
-  width:38px; height:38px; border-radius:50%; flex-shrink:0; overflow:hidden;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:14px; color:#fff;
+.mood-text{font-size:0.82rem;color:rgba(255,255,255,0.6);white-space:nowrap;}
+.mood-emojis{display:flex;gap:0.5rem;}
+.mood-emoji{
+  width:36px;height:36px;border-radius:50%;border:1.5px solid transparent;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;cursor:pointer;
+  transition:all var(--transition);background:var(--glass);
 }
-.co-av img { width:100%; height:100%; object-fit:cover; }
-.co-body { flex:1; }
-.co-txt {
-  width:100%; background:var(--s2); border:1px solid var(--bd);
-  border-radius:12px; color:var(--w); font-size:14px; line-height:1.55;
-  padding:11px 14px; outline:none; resize:none; transition:all .2s;
-  min-height:48px;
+.mood-emoji:hover,.mood-emoji.picked{border-color:var(--lavender);background:rgba(201,170,255,0.18);transform:scale(1.2);}
+.mood-reply{font-size:0.8rem;color:var(--lavender);display:none;animation:fadeIn .4s ease;}
+.mood-reply.show{display:block;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ============================
+   HERO
+   ============================ */
+#hero {
+  position:relative;z-index:2;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:2rem 2rem 4rem;
+  text-align:center;
 }
-.co-txt:focus { border-color:var(--p); background:var(--s3); }
-.co-txt::placeholder { color:var(--w4); }
-.co-actions { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
-.co-left { display:flex; gap:6px; }
-.img-label {
-  width:32px; height:32px; border-radius:8px; border:1px solid var(--bd2);
-  background:var(--s2); cursor:pointer; display:flex; align-items:center; justify-content:center;
-  font-size:15px; transition:all .2s; color:var(--w3);
+.hero-inner{max-width:820px;}
+.hero-badge {
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:999px;padding:0.4rem 1.2rem;
+  font-size:0.76rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--lilac);margin-bottom:2rem;
+  animation:heroUp .8s ease both;
 }
-.img-label:hover { border-color:var(--p2); color:var(--p2); background:var(--s3); }
-#post-img-input { display:none; }
-.img-preview { position:relative; margin-top:10px; }
-.img-preview img { width:100%; max-height:200px; object-fit:cover; border-radius:10px; border:1px solid var(--bd); }
-.img-rm { position:absolute; top:6px; right:6px; background:rgba(0,0,0,.6); color:#fff; border:none; border-radius:99px; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; }
-
-/* ════════════════════════════════════════
-   BUTTONS
-════════════════════════════════════════ */
-.btn-post { background:linear-gradient(135deg,var(--p),var(--p2)); color:#fff; border:none; padding:8px 20px; border-radius:99px; font-weight:700; font-size:13px; cursor:pointer; transition:all .2s; }
-.btn-post:hover { opacity:.88; }
-.btn-post:disabled { opacity:.4; cursor:not-allowed; }
-.btn-out { background:transparent; color:var(--w2); border:1px solid var(--bd2); padding:7px 18px; border-radius:99px; font-weight:600; font-size:13px; cursor:pointer; transition:all .2s; }
-.btn-out:hover { border-color:var(--p2); color:var(--p2); }
-.btn-flw { background:linear-gradient(135deg,var(--p),var(--p2)); color:#fff; border:none; padding:8px 22px; border-radius:99px; font-weight:700; font-size:13px; cursor:pointer; transition:all .2s; }
-.btn-flw:hover { opacity:.88; }
-.btn-flw.ing { background:transparent; color:var(--p2); border:1px solid var(--p); }
-.btn-flw.ing:hover { background:rgba(124,77,255,.1); }
-
-/* ════════════════════════════════════════
-   POST CARD
-════════════════════════════════════════ */
-.post { padding:16px 20px; border-bottom:1px solid var(--bd); transition:background .15s; position:relative; }
-.post:hover { background:rgba(124,77,255,.025); }
-.p-row { display:flex; gap:11px; }
-.p-av {
-  width:40px; height:40px; border-radius:50%; flex-shrink:0; overflow:hidden;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:15px; color:#fff; cursor:pointer; transition:opacity .2s;
+.hero-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,7.5vw,6rem);
+  font-weight:300;line-height:1.06;
+  letter-spacing:-0.02em;margin-bottom:1.6rem;
+  animation:heroUp .85s .08s ease both;
 }
-.p-av:hover { opacity:.8; }
-.p-av img { width:100%; height:100%; object-fit:cover; }
-.p-body { flex:1; min-width:0; }
-.p-meta { display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:5px; }
-.p-name { font-weight:700; font-size:14px; color:var(--w); cursor:pointer; }
-.p-name:hover { color:var(--p2); }
-.p-handle { font-size:12px; color:var(--w3); }
-.p-dot { color:var(--w4); font-size:10px; }
-.p-time { font-size:11px; color:var(--w4); }
-.p-txt { font-size:14px; color:var(--w2); line-height:1.72; margin-bottom:10px; word-break:break-word; }
-.p-img { width:100%; border-radius:10px; object-fit:cover; max-height:300px; margin-bottom:10px; border:1px solid var(--bd); }
-.p-acts { display:flex; gap:2px; }
-.pa {
-  display:flex; align-items:center; gap:5px; background:none; border:none;
-  cursor:pointer; color:var(--w3); font-size:12px; font-weight:500;
-  padding:6px 10px; border-radius:99px; transition:all .2s;
+.hero-title em{font-style:italic;color:var(--lilac);}
+.hero-title .wave{display:inline-block;animation:wave 2.5s ease-in-out infinite;}
+@keyframes wave{0%,100%{transform:rotate(0deg)}25%{transform:rotate(8deg)}75%{transform:rotate(-4deg)}}
+.hero-sub {
+  font-size:1rem;color:rgba(255,255,255,0.55);
+  line-height:1.85;max-width:540px;margin:0 auto 2.5rem;
+  font-weight:300;animation:heroUp .9s .15s ease both;
 }
-.pa:hover { background:rgba(124,77,255,.1); color:var(--p2); }
-.pa.liked { color:var(--p2); }
-.pa.saved { color:var(--gold); }
-.pa-ic { font-size:14px; }
-.p-del { position:absolute; top:12px; right:14px; background:none; border:none; cursor:pointer; color:var(--w4); font-size:13px; padding:4px 6px; border-radius:6px; transition:all .2s; opacity:0; }
-.post:hover .p-del { opacity:1; }
-.p-del:hover { color:var(--red); background:rgba(239,83,80,.1); }
-
-/* ════════════════════════════════════════
-   BADGES
-════════════════════════════════════════ */
-.badge { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:99px; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
-.b-dev { background:linear-gradient(135deg,#3d2000,#6b3500); color:var(--gold); border:1px solid rgba(255,202,40,.2); box-shadow:0 0 10px rgba(255,202,40,.12); }
-.b-ver { background:rgba(124,77,255,.12); color:var(--p2); border:1px solid rgba(124,77,255,.2); }
-
-/* ════════════════════════════════════════
-   COMMENTS
-════════════════════════════════════════ */
-.comments-box {
-  margin-top:0; padding:0 20px 16px; border-bottom:1px solid var(--bd);
-  background:var(--s1); display:none;
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:heroUp .9s .22s ease both;}
+.btn-primary {
+  background:linear-gradient(135deg,var(--violet),var(--lavender));
+  color:white;padding:0.85rem 2rem;border-radius:999px;
+  font-size:0.9rem;font-weight:600;border:none;cursor:pointer;
+  box-shadow:var(--shadow-soft);transition:all var(--transition);
+  display:inline-flex;align-items:center;gap:0.5rem;
 }
-.comments-box.open { display:block; }
-.comment-list { margin-bottom:12px; }
-.comment {
-  display:flex; gap:9px; padding:10px 0;
-  border-bottom:1px solid var(--bd);
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(92,61,143,0.6);}
+.btn-ghost {
+  background:transparent;color:rgba(255,255,255,0.75);
+  padding:0.85rem 2rem;border-radius:999px;font-size:0.9rem;
+  border:1px solid var(--glass-border);cursor:pointer;
+  transition:all var(--transition);display:inline-flex;align-items:center;gap:0.5rem;
 }
-.comment:last-child { border-bottom:none; }
-.cm-av {
-  width:30px; height:30px; border-radius:50%; flex-shrink:0; overflow:hidden;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:11px; color:#fff;
+.btn-ghost:hover{background:var(--glass);border-color:var(--lavender);color:var(--lilac);}
+
+/* Hero stats */
+.hero-stats {
+  display:flex;justify-content:center;gap:3rem;margin-top:3.5rem;
+  padding-top:3rem;border-top:1px solid var(--glass-border);
+  flex-wrap:wrap;
+  animation:heroUp .9s .3s ease both;
 }
-.cm-av img { width:100%; height:100%; object-fit:cover; }
-.cm-body { flex:1; }
-.cm-name { font-size:12px; font-weight:700; color:var(--w); margin-bottom:2px; }
-.cm-txt { font-size:13px; color:var(--w2); line-height:1.55; }
-.cm-time { font-size:11px; color:var(--w4); margin-top:2px; }
-.comment-inp-row { display:flex; gap:8px; align-items:center; }
-.cm-inp { flex:1; background:var(--s2); border:1px solid var(--bd); border-radius:99px; color:var(--w); font-size:13px; padding:9px 14px; outline:none; transition:all .2s; }
-.cm-inp:focus { border-color:var(--p); }
-.cm-inp::placeholder { color:var(--w4); }
-.cm-send { background:var(--p); color:#fff; border:none; border-radius:99px; padding:9px 16px; font-weight:700; font-size:12px; cursor:pointer; transition:all .2s; }
-.cm-send:hover { background:var(--p2); }
+.stat{text-align:center;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--lilac);}
+.stat-label{font-size:0.75rem;color:rgba(255,255,255,0.4);letter-spacing:0.06em;text-transform:uppercase;margin-top:0.2rem;}
 
-/* ════════════════════════════════════════
-   PROFILE PAGE
-════════════════════════════════════════ */
-.p-cover { height:148px; background:linear-gradient(135deg,#2a1060,var(--p),var(--p2),var(--pink)); position:relative; overflow:hidden; flex-shrink:0; }
-.p-cover::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 40%,rgba(7,6,16,.6)); }
-[data-theme="light"] .p-cover::after { background:linear-gradient(to bottom,transparent 40%,rgba(245,243,255,.4)); }
-.p-info { padding:0 20px 18px; border-bottom:1px solid var(--bd); background:var(--s1); }
-.p-pav { width:74px; height:74px; border-radius:50%; border:3px solid var(--bg); background:linear-gradient(135deg,var(--p),var(--p2)); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:26px; color:#fff; overflow:hidden; margin-top:-37px; margin-bottom:10px; cursor:pointer; transition:opacity .2s; }
-.p-pav:hover { opacity:.85; }
-.p-pav img { width:100%; height:100%; object-fit:cover; }
-.p-nameline { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:2px; }
-.p-pname { font-weight:800; font-size:20px; color:var(--w); }
-.p-phandle { font-size:13px; color:var(--w3); margin-bottom:8px; }
-.p-pbio { font-size:13px; color:var(--w2); line-height:1.65; max-width:440px; margin-bottom:12px; }
-.p-stats { display:flex; gap:20px; margin-bottom:12px; }
-.ps-n { font-weight:800; font-size:16px; color:var(--w); }
-.ps-l { font-size:11px; color:var(--w3); }
-.type-pill { display:inline-flex; align-items:center; gap:5px; background:var(--s2); border:1px solid var(--bd); border-radius:99px; padding:3px 10px; font-size:11px; font-weight:600; color:var(--w3); margin-bottom:10px; }
+/* Scroll indicator */
+.scroll-hint{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:0.4rem;
+  color:rgba(255,255,255,0.25);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;
+  animation:fadeIn 2s 1.5s ease both;
+}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,rgba(201,170,255,0.5),transparent);animation:scrollBob 2.2s ease-in-out infinite;}
+@keyframes scrollBob{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.15)}}
+@keyframes heroUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
-.ptabs { display:flex; border-bottom:1px solid var(--bd); background:var(--s1); position:sticky; top:0; z-index:5; }
-.ptb { flex:1; padding:13px; text-align:center; cursor:pointer; font-weight:700; font-size:13px; color:var(--w3); border-bottom:2px solid transparent; transition:all .2s; }
-.ptb:hover { color:var(--w); }
-.ptb.on { color:var(--p2); border-bottom-color:var(--p2); }
+/* ============================
+   SECTION HEADER
+   ============================ */
+.sec-header{text-align:center;margin-bottom:3.5rem;}
+.sec-label{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--lavender);margin-bottom:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;}
+.sec-label::before,.sec-label::after{content:'';flex:1;max-width:40px;height:1px;background:rgba(201,170,255,0.3);}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:300;line-height:1.15;}
+.sec-title em{color:var(--lilac);font-style:italic;}
+.sec-desc{color:rgba(255,255,255,0.45);max-width:500px;margin:1rem auto 0;line-height:1.85;font-size:0.88rem;}
 
-/* ════════════════════════════════════════
-   PORTFOLIO
-════════════════════════════════════════ */
-.pg-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:18px 20px; }
-.port-card { background:var(--s1); border:1px solid var(--bd); border-radius:12px; overflow:hidden; transition:all .25s; }
-.port-card:hover { border-color:rgba(124,77,255,.3); transform:translateY(-2px); box-shadow:0 12px 28px var(--shadow); }
-.pc-thumb { height:110px; background:linear-gradient(135deg,var(--s3),var(--p)); display:flex; align-items:center; justify-content:center; font-size:28px; position:relative; overflow:hidden; }
-.pc-thumb img { width:100%; height:100%; object-fit:cover; }
-.pc-body { padding:13px; }
-.pc-title { font-weight:700; font-size:13px; color:var(--w); margin-bottom:5px; }
-.pc-desc { font-size:12px; color:var(--w3); line-height:1.5; margin-bottom:8px; }
-.pc-tags { display:flex; flex-wrap:wrap; gap:4px; }
-.ptag { font-size:10px; font-weight:700; background:rgba(124,77,255,.12); color:var(--p2); padding:2px 7px; border-radius:99px; border:1px solid rgba(124,77,255,.2); }
-.pc-link { display:block; margin-top:8px; font-size:12px; font-weight:600; color:var(--p2); }
-.pc-link:hover { color:var(--p3); }
-.pc-rm { background:none; border:none; cursor:pointer; font-size:11px; color:rgba(239,83,80,.5); margin-top:4px; transition:color .2s; }
-.pc-rm:hover { color:var(--red); }
+/* ============================
+   TOPICS
+   ============================ */
+#topics{padding:6rem 0;background:linear-gradient(to bottom,transparent,rgba(15,8,35,0.4));}
+.topics-filter{display:flex;justify-content:center;gap:0.6rem;margin-bottom:3rem;flex-wrap:wrap;}
+.filter-btn{
+  padding:0.4rem 1.1rem;border-radius:999px;font-size:0.78rem;
+  border:1px solid var(--glass-border);background:var(--glass);
+  color:rgba(255,255,255,0.5);cursor:pointer;transition:all var(--transition);
+}
+.filter-btn:hover,.filter-btn.active{background:rgba(201,170,255,0.2);border-color:var(--lavender);color:var(--lilac);}
+.topics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem;}
+.topic-card {
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);padding:2rem;cursor:pointer;
+  transition:all var(--transition);position:relative;overflow:hidden;
+}
+.topic-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(92,61,143,0.15),transparent);opacity:0;transition:opacity var(--transition);}
+.topic-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-soft);border-color:rgba(201,170,255,0.35);}
+.topic-card:hover::after{opacity:1;}
+.topic-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;}
+.topic-icon{width:46px;height:46px;background:linear-gradient(135deg,var(--violet),var(--lavender));border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.topic-difficulty{font-size:0.68rem;padding:0.2rem 0.7rem;border-radius:999px;border:1px solid var(--glass-border);color:rgba(255,255,255,0.4);}
+.topic-card h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--mist);margin-bottom:0.6rem;}
+.topic-card p{font-size:0.84rem;color:rgba(255,255,255,0.45);line-height:1.75;margin-bottom:1.2rem;}
+.topic-footer{display:flex;align-items:center;justify-content:space-between;}
+.topic-tag{display:inline-block;background:rgba(201,170,255,0.1);border:1px solid rgba(201,170,255,0.18);color:var(--lilac);padding:0.2rem 0.7rem;border-radius:999px;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;}
+.topic-read{font-size:0.75rem;color:rgba(255,255,255,0.25);}
 
-/* ════════════════════════════════════════
-   EXPLORE
-════════════════════════════════════════ */
-.exp-card { display:flex; align-items:center; gap:12px; padding:13px 20px; border-bottom:1px solid var(--bd); cursor:pointer; transition:background .15s; }
-.exp-card:hover { background:rgba(124,77,255,.025); }
-.ex-av { width:46px; height:46px; border-radius:50%; flex-shrink:0; overflow:hidden; background:linear-gradient(135deg,var(--p),var(--p2)); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:17px; color:#fff; }
-.ex-av img { width:100%; height:100%; object-fit:cover; }
-.ex-info { flex:1; min-width:0; }
-.ex-name { font-weight:700; font-size:14px; color:var(--w); display:flex; align-items:center; gap:6px; }
-.ex-handle { font-size:12px; color:var(--w3); }
-.ex-bio { font-size:12px; color:var(--w3); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-/* ════════════════════════════════════════
-   BOOKMARKS
-════════════════════════════════════════ */
-#pg-saved .post { background:var(--s1); }
-
-/* ════════════════════════════════════════
-   RIGHT PANEL
-════════════════════════════════════════ */
-#rp { background:var(--s1); border-left:1px solid var(--bd); height:100vh; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:14px; transition:background .3s; }
-.widget { background:var(--s2); border:1px solid var(--bd); border-radius:12px; padding:16px; }
-.wt { font-weight:700; font-size:13px; color:var(--w); margin-bottom:12px; }
-.w-dev { background:linear-gradient(135deg,#1c0d00,#2e1800); border-color:rgba(255,202,40,.12); }
-.w-dev .wt { color:var(--gold); }
-.dev-txt { font-size:12px; color:#d97706; line-height:1.65; }
-
-/* Trending */
-.trend-item { padding:8px 0; border-bottom:1px solid var(--bd); cursor:pointer; transition:all .2s; }
-.trend-item:last-child { border-bottom:none; }
-.trend-item:hover { color:var(--p2); }
-.trend-tag { font-size:13px; font-weight:700; color:var(--p2); margin-bottom:2px; }
-.trend-cnt { font-size:11px; color:var(--w3); }
-
-/* Suggestions */
-.sug-row { display:flex; align-items:center; gap:9px; padding:7px; border-radius:8px; cursor:pointer; transition:background .15s; }
-.sug-row:hover { background:var(--s3); }
-.sg-av { width:32px; height:32px; border-radius:50%; flex-shrink:0; overflow:hidden; background:linear-gradient(135deg,var(--p),var(--p2)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; color:#fff; }
-.sg-av img { width:100%; height:100%; object-fit:cover; }
-.sg-name { font-size:13px; font-weight:600; color:var(--w); }
-.sg-handle { font-size:11px; color:var(--w3); }
-.sg-btn { margin-left:auto; background:none; border:1px solid var(--bd2); color:var(--w3); padding:4px 11px; border-radius:99px; font-size:11px; font-weight:600; cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; }
-.sg-btn:hover { border-color:var(--p2); color:var(--p2); }
-
-/* ════════════════════════════════════════
+/* ============================
    MODAL
-════════════════════════════════════════ */
-.ov { display:none; position:fixed; inset:0; z-index:4999; background:rgba(0,0,0,.65); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:20px; }
-.ov.on { display:flex; }
-.mo {
-  background:var(--s1); border:1px solid var(--bd2); border-radius:20px;
-  padding:26px 28px; width:100%; max-width:440px;
-  box-shadow:0 24px 60px var(--shadow); animation:mIn .22s ease; position:relative;
+   ============================ */
+.overlay{position:fixed;inset:0;background:rgba(8,4,20,0.88);backdrop-filter:blur(16px);z-index:600;display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity var(--transition);}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{
+  background:linear-gradient(145deg,#1d0f35,#2a1848);
+  border:1px solid var(--glass-border);border-radius:var(--radius-lg);
+  max-width:680px;width:100%;max-height:88vh;overflow-y:auto;
+  padding:2.5rem;position:relative;
+  transform:translateY(24px) scale(0.97);
+  transition:transform var(--transition);
+  scrollbar-width:thin;scrollbar-color:var(--violet) transparent;
 }
-.mo::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:50%; height:1px; background:linear-gradient(90deg,transparent,var(--p2),transparent); border-radius:99px; }
-@keyframes mIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
-.mo-title { font-weight:800; font-size:17px; color:var(--w); margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; }
-.mo-x { background:none; border:none; cursor:pointer; color:var(--w3); font-size:18px; transition:color .2s; line-height:1; }
-.mo-x:hover { color:var(--w); }
+.overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-close{position:absolute;top:1.2rem;right:1.2rem;width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-border);color:rgba(255,255,255,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:all var(--transition);}
+.modal-close:hover{background:rgba(201,170,255,0.2);color:var(--lilac);}
+.modal-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.modal-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--violet),var(--lavender));display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.modal-meta{flex:1;}
+.modal-tag-m{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--lavender);margin-bottom:0.3rem;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:var(--mist);line-height:1.2;}
+.modal-body{color:rgba(255,255,255,0.68);line-height:1.9;font-size:0.88rem;}
+.modal-body h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--lilac);margin:1.5rem 0 0.5rem;font-weight:600;}
+.modal-body p{margin-bottom:0.8rem;}
+.modal-body ul{padding-left:1.3rem;margin:0.4rem 0 0.8rem;}
+.modal-body li{margin-bottom:0.45rem;}
+.modal-body strong{color:rgba(255,255,255,0.85);}
+.modal-source{margin-top:1.8rem;padding:0.9rem 1.1rem;background:rgba(155,114,207,0.08);border-left:2px solid var(--lavender);border-radius:0 8px 8px 0;font-size:0.74rem;color:rgba(255,255,255,0.35);line-height:1.6;}
+.modal-source strong{color:var(--lavender);}
+.modal-actions{display:flex;gap:0.8rem;margin-top:1.5rem;flex-wrap:wrap;}
+.modal-btn{padding:0.6rem 1.3rem;border-radius:999px;font-size:0.8rem;border:1px solid var(--glass-border);background:var(--glass);color:rgba(255,255,255,0.65);cursor:pointer;transition:all var(--transition);}
+.modal-btn:hover{background:rgba(201,170,255,0.15);color:var(--lilac);border-color:var(--lavender);}
+.modal-btn.primary{background:linear-gradient(135deg,var(--violet),var(--lavender));color:white;border:none;}
 
-/* ════════════════════════════════════════
-   EMPTY
-════════════════════════════════════════ */
-.empty { text-align:center; padding:56px 20px; }
-.e-ic { font-size:34px; display:block; margin-bottom:12px; opacity:.35; }
-.e-t { font-weight:700; font-size:15px; color:var(--w3); margin-bottom:4px; }
-.e-s { font-size:13px; color:var(--w4); }
+/* ============================
+   BREATHING EXERCISE
+   ============================ */
+#breathing{padding:6rem 0;background:rgba(12,6,28,0.5);}
+.breathing-inner{max-width:1100px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.breathing-text .sec-title{margin-bottom:1rem;text-align:left;}
+.breathing-text .sec-label{justify-content:flex-start;}
+.breathing-text .sec-label::before{display:none;}
+.breathing-text p{color:rgba(255,255,255,0.5);line-height:1.85;font-size:0.88rem;margin-bottom:1rem;}
+.breathing-widget{display:flex;flex-direction:column;align-items:center;gap:2rem;}
+.breath-circle-wrap{position:relative;width:220px;height:220px;}
+.breath-outer{
+  width:220px;height:220px;border-radius:50%;
+  border:1px solid rgba(201,170,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.breath-ring{
+  position:absolute;inset:-8px;border-radius:50%;
+  border:2px solid rgba(155,114,207,0.3);
+  animation:breatheRing 4s ease-in-out infinite;
+}
+.breath-circle{
+  width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,var(--violet-mid),var(--plum));
+  box-shadow:0 0 40px rgba(92,61,143,0.5),inset 0 0 30px rgba(0,0,0,0.3);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.2rem;
+  cursor:pointer;transition:transform .2s;
+  animation:breatheCircle 8s ease-in-out infinite paused;
+}
+.breath-circle.running{animation-play-state:running;}
+.breath-label{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+.breath-phase{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--lilac);}
+.breath-count{font-size:2rem;color:white;font-weight:300;font-family:'Cormorant Garamond',serif;}
+@keyframes breatheCircle{
+  0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(92,61,143,0.5),inset 0 0 30px rgba(0,0,0,0.3);}
+  40%{transform:scale(1.22);box-shadow:0 0 70px rgba(92,61,143,0.7),inset 0 0 30px rgba(0,0,0,0.2);}
+  50%{transform:scale(1.22);}
+  90%{transform:scale(1);}
+}
+@keyframes breatheRing{
+  0%,100%{transform:scale(1);opacity:0.3;}
+  40%{transform:scale(1.3);opacity:0.8;}
+  50%{transform:scale(1.3);opacity:0.8;}
+  90%{transform:scale(1);opacity:0.3;}
+}
+.breath-techniques{display:flex;flex-direction:column;gap:0.7rem;width:100%;}
+.breath-tech{
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius-md);padding:1rem 1.2rem;cursor:pointer;
+  transition:all var(--transition);display:flex;align-items:center;gap:1rem;
+}
+.breath-tech:hover,.breath-tech.active{background:rgba(201,170,255,0.12);border-color:var(--lavender);}
+.breath-tech-icon{font-size:1.1rem;}
+.breath-tech-name{font-size:0.85rem;color:rgba(255,255,255,0.75);font-weight:500;}
+.breath-tech-desc{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:0.1rem;}
 
-/* ════════════════════════════════════════
-   UPLOAD AVATAR CIRCLE
-════════════════════════════════════════ */
-.av-upload-wrap { position:relative; display:inline-block; cursor:pointer; }
-.av-upload-over { position:absolute; inset:0; border-radius:50%; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; font-size:20px; opacity:0; transition:opacity .2s; }
-.av-upload-wrap:hover .av-upload-over { opacity:1; }
-#av-file { display:none; }
+/* ============================
+   HEALING SECTION
+   ============================ */
+#healing{padding:6rem 0;}
+.healing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.2rem;}
+.heal-card{
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);padding:1.8rem;
+  transition:all var(--transition);position:relative;overflow:hidden;
+}
+.heal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--lavender));transform:scaleX(0);transform-origin:left;transition:transform var(--transition);}
+.heal-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-soft);}
+.heal-card:hover::before{transform:scaleX(1);}
+.heal-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:600;color:rgba(201,170,255,0.15);line-height:1;margin-bottom:0.5rem;}
+.heal-card h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--mist);margin-bottom:0.6rem;}
+.heal-card p{font-size:0.84rem;color:rgba(255,255,255,0.45);line-height:1.8;}
+.heal-time{display:flex;align-items:center;gap:0.4rem;margin-top:1rem;font-size:0.72rem;color:var(--lavender);}
 
-/* ════════════════════════════════════════
+/* ============================
+   KONSULTASI / CHAT
+   ============================ */
+#konsultasi{padding:6rem 0;background:rgba(12,6,28,0.5);}
+.konsultasi-layout{display:grid;grid-template-columns:1fr 1.3fr;gap:3rem;align-items:start;}
+.konsul-left{}
+.konsul-left .sec-title{text-align:left;margin-bottom:1rem;}
+.konsul-left .sec-label{justify-content:flex-start;}
+.konsul-left .sec-label::before{display:none;}
+.konsul-left p{color:rgba(255,255,255,0.5);line-height:1.85;font-size:0.88rem;margin-bottom:1.5rem;}
+.konsul-features{display:flex;flex-direction:column;gap:0.8rem;}
+.konsul-feat{display:flex;align-items:flex-start;gap:0.9rem;padding:1rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-md);}
+.konsul-feat-icon{font-size:1.2rem;margin-top:0.1rem;}
+.konsul-feat-text h4{font-size:0.88rem;color:var(--mist);margin-bottom:0.2rem;font-weight:600;}
+.konsul-feat-text p{font-size:0.78rem;color:rgba(255,255,255,0.4);line-height:1.6;}
+
+/* Chat window */
+.chat-wrap{background:rgba(8,4,20,0.6);border:1px solid var(--glass-border);border-radius:var(--radius-lg);overflow:hidden;}
+.chat-header{background:linear-gradient(90deg,rgba(45,27,78,.9),rgba(30,15,56,.9));padding:1rem 1.4rem;display:flex;align-items:center;gap:0.9rem;border-bottom:1px solid var(--glass-border);}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--lavender));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.chat-avatar-ring{width:40px;height:40px;border-radius:50%;border:2px solid var(--lavender);position:absolute;animation:ringPulse 2.5s ease-in-out infinite;}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.2);opacity:0}}
+.chat-meta h4{font-size:0.88rem;color:var(--mist);font-weight:600;}
+.chat-meta span{font-size:0.72rem;color:rgba(255,255,255,0.4);}
+.online-dot{width:8px;height:8px;background:#6EE7B7;border-radius:50%;margin-left:auto;box-shadow:0 0 8px #6EE7B7;flex-shrink:0;}
+
+/* Quick topics */
+.chat-quick{padding:0.8rem 1.2rem;display:flex;gap:0.5rem;flex-wrap:wrap;border-bottom:1px solid var(--glass-border);background:rgba(20,10,40,0.4);}
+.quick-chip{
+  padding:0.3rem 0.8rem;border-radius:999px;font-size:0.72rem;
+  background:rgba(201,170,255,0.1);border:1px solid rgba(201,170,255,0.18);
+  color:var(--lilac);cursor:pointer;transition:all var(--transition);white-space:nowrap;
+}
+.quick-chip:hover{background:rgba(201,170,255,0.22);border-color:var(--lavender);}
+
+.chat-body{padding:1.2rem;display:flex;flex-direction:column;gap:1rem;height:340px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--violet) transparent;}
+.msg{max-width:85%;font-size:0.84rem;line-height:1.75;position:relative;}
+.msg.bot{align-self:flex-start;}
+.msg.user{align-self:flex-end;}
+.msg-bubble{padding:0.8rem 1.1rem;border-radius:16px;}
+.msg.bot .msg-bubble{background:rgba(92,61,143,0.3);border:1px solid rgba(92,61,143,0.35);border-bottom-left-radius:4px;color:rgba(255,255,255,0.82);}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--violet),var(--lavender));color:white;border-bottom-right-radius:4px;}
+.msg-time{font-size:0.65rem;color:rgba(255,255,255,0.25);margin-top:0.25rem;padding:0 0.2rem;}
+.msg.user .msg-time{text-align:right;}
+.typing-bubble{padding:0.8rem 1.1rem;border-radius:16px;border-bottom-left-radius:4px;background:rgba(92,61,143,0.3);border:1px solid rgba(92,61,143,0.35);display:inline-flex;gap:5px;align-items:center;}
+.t-dot{width:6px;height:6px;background:var(--lavender);border-radius:50%;animation:tDot 1.2s ease-in-out infinite;}
+.t-dot:nth-child(2){animation-delay:.2s}.t-dot:nth-child(3){animation-delay:.4s}
+@keyframes tDot{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-6px);opacity:1}}
+
+.chat-input-row{padding:1rem 1.2rem;border-top:1px solid var(--glass-border);display:flex;gap:0.7rem;background:rgba(16,8,34,0.4);}
+.chat-input{
+  flex:1;background:rgba(255,255,255,0.06);
+  border:1px solid var(--glass-border);border-radius:999px;
+  padding:0.65rem 1.2rem;color:white;
+  font-family:inherit;font-size:0.84rem;outline:none;
+  transition:border-color var(--transition);
+}
+.chat-input::placeholder{color:rgba(255,255,255,0.25);}
+.chat-input:focus{border-color:var(--lavender);}
+.chat-send{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--lavender));border:none;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;transition:all var(--transition);}
+.chat-send:hover{transform:scale(1.1);box-shadow:0 4px 20px rgba(92,61,143,0.5);}
+.crisis-bar{padding:0.65rem 1.2rem;background:rgba(249,165,209,0.07);border-top:1px solid rgba(249,165,209,0.12);text-align:center;font-size:0.72rem;color:rgba(255,255,255,0.35);}
+.crisis-bar a{color:var(--peach);font-weight:600;}
+
+/* ============================
+   SELF TEST (FULL REVAMP)
+   ============================ */
+#selftest{padding:6rem 0;}
+.test-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:4rem;align-items:center;}
+.test-info .sec-title{text-align:left;margin-bottom:1rem;}
+.test-info .sec-label{justify-content:flex-start;}
+.test-info .sec-label::before{display:none;}
+.test-info p{color:rgba(255,255,255,0.5);line-height:1.85;font-size:0.88rem;margin-bottom:1.5rem;}
+.test-disclaimer{background:rgba(201,170,255,0.07);border:1px solid rgba(201,170,255,0.15);border-radius:var(--radius-md);padding:1rem 1.2rem;font-size:0.78rem;color:rgba(255,255,255,0.4);line-height:1.7;display:flex;gap:0.7rem;}
+.test-disclaimer-icon{font-size:1rem;flex-shrink:0;}
+
+.test-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);overflow:hidden;}
+.test-topbar{padding:1.2rem 1.5rem;border-bottom:1px solid var(--glass-border);display:flex;align-items:center;justify-content:space-between;}
+.test-title-bar{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--lilac);}
+.test-steps-bar{display:flex;gap:3px;}
+.test-step-dot{width:20px;height:3px;border-radius:999px;background:rgba(255,255,255,0.1);transition:background .3s;}
+.test-step-dot.done{background:var(--lavender);}
+.test-step-dot.current{background:var(--lilac);}
+.test-body{padding:1.8rem 1.5rem;}
+.test-q-num{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:0.8rem;}
+.test-q-text{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--mist);line-height:1.4;margin-bottom:1.5rem;}
+.test-options{display:flex;flex-direction:column;gap:0.6rem;}
+.test-opt{
+  padding:0.85rem 1.1rem;border-radius:var(--radius-md);
+  background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);
+  color:rgba(255,255,255,0.6);font-size:0.84rem;cursor:pointer;text-align:left;
+  transition:all var(--transition);display:flex;align-items:center;gap:0.8rem;
+}
+.test-opt::before{content:'';width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2);flex-shrink:0;transition:all .2s;}
+.test-opt:hover{background:rgba(201,170,255,0.1);border-color:rgba(201,170,255,0.3);color:white;}
+.test-opt.sel{background:rgba(92,61,143,0.35);border-color:var(--violet);color:white;}
+.test-opt.sel::before{background:var(--lavender);border-color:var(--lavender);}
+.test-footer{padding:1.2rem 1.5rem;border-top:1px solid var(--glass-border);display:flex;align-items:center;justify-content:space-between;}
+.test-progress-text{font-size:0.75rem;color:rgba(255,255,255,0.3);}
+.test-next{padding:0.6rem 1.5rem;border-radius:999px;background:linear-gradient(135deg,var(--violet),var(--lavender));color:white;border:none;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all var(--transition);}
+.test-next:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft);}
+
+/* Result */
+.test-result-inner{padding:2rem;text-align:center;}
+.result-icon{font-size:3rem;margin-bottom:1rem;}
+.result-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:0.8rem;}
+.result-desc{font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.85;max-width:380px;margin:0 auto 1.5rem;}
+.result-score-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;margin:1rem 0;}
+.result-score-fill{height:100%;border-radius:999px;transition:width 1s ease;}
+.result-tags{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem;}
+.result-tag{padding:0.3rem 0.8rem;border-radius:999px;font-size:0.72rem;background:rgba(201,170,255,0.1);border:1px solid rgba(201,170,255,0.2);color:var(--lilac);}
+
+/* ============================
+   RESOURCES
+   ============================ */
+#resources{padding:6rem 0;background:rgba(12,6,28,0.5);}
+.resources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.2rem;}
+.res-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:1.8rem;transition:all var(--transition);}
+.res-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-soft);border-color:rgba(201,170,255,0.3);}
+.res-icon{font-size:2rem;margin-bottom:1rem;}
+.res-card h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--mist);margin-bottom:0.5rem;}
+.res-card p{font-size:0.8rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:1rem;}
+.res-link{font-size:0.75rem;color:var(--lavender);letter-spacing:0.05em;text-transform:uppercase;transition:color var(--transition);}
+.res-link:hover{color:var(--lilac);}
+
+/* Crisis card */
+.crisis-card{
+  background:linear-gradient(135deg,rgba(249,165,209,0.1),rgba(92,61,143,0.15));
+  border:1px solid rgba(249,165,209,0.2);
+  border-radius:var(--radius-lg);padding:2rem;
+  display:flex;align-items:flex-start;gap:1.2rem;
+  margin-top:1.5rem;
+}
+.crisis-icon{font-size:2rem;flex-shrink:0;}
+.crisis-text h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--peach);margin-bottom:0.4rem;}
+.crisis-text p{font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.75;}
+.crisis-text strong{color:var(--peach);}
+.crisis-text a{color:var(--peach);font-weight:700;}
+
+/* ============================
+   FOOTER
+   ============================ */
+footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padding:3rem 2rem;background:rgba(8,4,20,0.6);}
+.footer-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;}
+.footer-brand .logo-f{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--lilac);margin-bottom:0.8rem;}
+.footer-brand p{font-size:0.8rem;color:rgba(255,255,255,0.3);line-height:1.7;max-width:220px;}
+.footer-col h5{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:1rem;}
+.footer-col a{display:block;font-size:0.82rem;color:rgba(255,255,255,0.45);margin-bottom:0.6rem;transition:color var(--transition);}
+.footer-col a:hover{color:var(--lilac);}
+.footer-bottom{max-width:1180px;margin:2rem auto 0;padding-top:1.5rem;border-top:1px solid var(--glass-border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-note{font-size:0.72rem;color:rgba(255,255,255,0.22);}
+.footer-socials{display:flex;gap:0.6rem;}
+.soc{width:32px;height:32px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:rgba(255,255,255,0.4);cursor:pointer;transition:all var(--transition);}
+.soc:hover{background:rgba(201,170,255,0.15);color:var(--lilac);border-color:var(--lavender);}
+
+/* ============================
+   REVEAL ANIMATION
+   ============================ */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ============================
    RESPONSIVE
-════════════════════════════════════════ */
-@media(max-width:1120px) { #app.on { grid-template-columns:220px 1fr; } #rp { display:none; } }
-@media(max-width:700px)  { #app.on { grid-template-columns:1fr; } #sb { display:none; } }
+   ============================ */
+@media(max-width:900px){
+  .nav-center,.nav-btn{display:none;}
+  .hamburger{display:flex;}
+  .breathing-inner,.konsultasi-layout,.test-layout{grid-template-columns:1fr;gap:3rem;}
+  .healing-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem;}
+}
+@media(max-width:600px){
+  #topics,#breathing,#healing,#konsultasi,#selftest,#resources{padding:4.5rem 0;}
+  .topics-grid{grid-template-columns:1fr;}
+  .resources-grid{grid-template-columns:1fr;}
+  .hero-stats{gap:1.5rem;}
+  .footer-inner{grid-template-columns:1fr;}
+  .footer-col:last-child{display:none;}
+  .modal{padding:1.8rem;}
+  .breathing-inner{padding:0 1.5rem;}
+}
 </style>
 </head>
 <body>
 
-<div id="amb"><div class="amb a1"></div><div class="amb a2"></div><div class="amb a3"></div></div>
-<div id="loader"><div class="ld-logo">ZHUMA</div><div class="ld-track"><div class="ld-bar"></div></div></div>
-<div id="toasts"></div>
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-logo">✦ PsycheSpace</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-text">Mempersiapkan ruang amanmu...</div>
+</div>
 
-<!-- ══════════ AUTH ══════════ -->
-<div id="auth">
-  <div class="ac">
-    <div class="ac-logo">ZHUMA</div>
-    <div class="ac-sub">Your professional creative network.</div>
-    <div class="segs">
-      <button class="seg on" onclick="swTab('login')">Sign in</button>
-      <button class="seg"    onclick="swTab('reg')">Sign up</button>
-    </div>
-    <!-- login -->
-    <div id="f-login">
-      <div class="fi"><label class="fl">Email</label><input class="inp" type="email" id="l-em" placeholder="you@example.com"></div>
-      <div class="fi"><label class="fl">Password</label><input class="inp" type="password" id="l-pw" placeholder="••••••••"></div>
-      <button class="btn-p" id="btn-li" onclick="doLogin()">Sign in →</button>
-    </div>
-    <!-- register -->
-    <div id="f-reg" style="display:none">
-      <div class="fi"><label class="fl">Account type</label>
-        <div class="tgrid">
-          <div class="tc on" onclick="pickT('personal',this)"><span class="tc-em">👤</span><div class="tc-lb">Personal</div></div>
-          <div class="tc"    onclick="pickT('company',this)"><span class="tc-em">🏢</span><div class="tc-lb">Company</div></div>
-          <div class="tc"    onclick="pickT('na',this)"><span class="tc-em">⚪</span><div class="tc-lb">N/A</div></div>
-        </div>
+<!-- Cursor (desktop) -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- BG -->
+<div class="bg-wrap">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+</div>
+<div class="grain"></div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-icon" id="mIcon"></div>
+      <div class="modal-meta">
+        <div class="modal-tag-m" id="mTag"></div>
+        <h2 class="modal-title" id="mTitle"></h2>
       </div>
-      <div class="fi"><label class="fl">Full name</label><input class="inp" id="r-nm" placeholder="Your name"></div>
-      <div class="fi"><label class="fl">Username</label><input class="inp" id="r-un" placeholder="yourhandle" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"></div>
-      <div class="fi"><label class="fl">Email</label><input class="inp" type="email" id="r-em" placeholder="you@example.com"></div>
-      <div class="fi"><label class="fl">Password</label><input class="inp" type="password" id="r-pw" placeholder="Min. 6 chars"></div>
-      <button class="btn-p" id="btn-rg" onclick="doReg()">Create account →</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-source" id="mSource"></div>
+    <div class="modal-actions">
+      <button class="modal-btn primary" onclick="document.getElementById('konsultasi').scrollIntoView({behavior:'smooth'});closeModal()">💬 Diskusikan dengan Lyra</button>
+      <button class="modal-btn" onclick="closeModal()">Tutup</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════ APP ══════════ -->
-<div id="app">
-  <!-- SIDEBAR -->
-  <div id="sb">
-    <div class="sb-head"><div class="sb-logo">ZHUMA</div></div>
-    <div class="sb-search">
-      <div class="search-wrap">
-        <span class="search-ic">🔍</span>
-        <input class="search-inp" id="search-inp" placeholder="Search people..." oninput="doSearch(this.value)">
-        <div class="search-results" id="search-results"></div>
-      </div>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMenu()">✕</button>
+  <a href="#topics" onclick="toggleMenu()">Topik</a>
+  <a href="#breathing" onclick="toggleMenu()">Latihan</a>
+  <a href="#healing" onclick="toggleMenu()">Penyembuhan</a>
+  <a href="#konsultasi" onclick="toggleMenu()">Konsultasi</a>
+  <a href="#selftest" onclick="toggleMenu()">Self-Test</a>
+  <a href="#resources" onclick="toggleMenu()">Sumber</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo"><span class="dot"></span>PsycheSpace</a>
+  <div class="nav-center">
+    <a href="#topics" class="nav-link">Topik</a>
+    <a href="#breathing" class="nav-link">Latihan</a>
+    <a href="#healing" class="nav-link">Penyembuhan</a>
+    <a href="#konsultasi" class="nav-link">Konsultasi</a>
+    <a href="#selftest" class="nav-link">Self-Test</a>
+    <a href="#resources" class="nav-link">Sumber</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="document.getElementById('konsultasi').scrollIntoView({behavior:'smooth'})">Mulai Bicara 💜</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOOD BANNER -->
+<div id="mood-banner">
+  <span class="mood-text">Hai! Bagaimana perasaanmu hari ini?</span>
+  <div class="mood-emojis">
+    <div class="mood-emoji" onclick="pickMood(this,'😊','Senang kamu merasa baik hari ini! 🌟 Jaga energi positif itu.')">😊</div>
+    <div class="mood-emoji" onclick="pickMood(this,'😐','Hari yang biasa juga valid, kok. Kamu sudah hebat dengan hadir.')">😐</div>
+    <div class="mood-emoji" onclick="pickMood(this,'😔','Tidak apa-apa merasa sedih. Kamu tidak sendirian di sini. 💜')">😔</div>
+    <div class="mood-emoji" onclick="pickMood(this,'😰','Cemas itu berat. Yuk coba latihan napas di bawah ini.')">😰</div>
+    <div class="mood-emoji" onclick="pickMood(this,'😤','Marah adalah emosi yang valid. Coba ceritakan ke Lyra.')">😤</div>
+  </div>
+  <span class="mood-reply" id="moodReply"></span>
+</div>
+
+<!-- HERO -->
+<section id="hero" class="section-wrap">
+  <div class="hero-inner">
+    <div class="hero-badge">✦ Ruang aman berbasis sains psikologi</div>
+    <h1 class="hero-title">
+      Kamu tidak harus<br><em>melaluinya</em><br>sendirian <span class="wave">🌙</span>
+    </h1>
+    <p class="hero-sub">Pelajari psikologi berbasis bukti ilmiah. Pahami emosi, trauma, dan cara tumbuh — dengan bahasa yang manusiawi, bukan menghakimi.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('topics').scrollIntoView({behavior:'smooth'})">Jelajahi Topik →</button>
+      <button class="btn-ghost" onclick="document.getElementById('konsultasi').scrollIntoView({behavior:'smooth'})">💬 Cerita ke Lyra</button>
     </div>
-    <div class="sb-nav">
-      <button class="nb on" onclick="goPage('feed',this)"><span class="nb-ic">🏠</span>Home</button>
-      <button class="nb"    onclick="goPage('explore',this)"><span class="nb-ic">🔍</span>Explore</button>
-      <button class="nb"    onclick="goMyProf(this)"><span class="nb-ic">👤</span>My Profile</button>
-      <button class="nb"    onclick="goPage('myport',this)"><span class="nb-ic">🗂️</span>Portfolio</button>
-      <button class="nb"    onclick="goPage('saved',this)"><span class="nb-ic">🔖</span>Bookmarks</button>
-      <button class="nb"    onclick="openMo('mo-port')"><span class="nb-ic">➕</span>Add Project</button>
-    </div>
-    <div class="sb-foot">
-      <div class="me-row" onclick="goMyProf(null)">
-        <div class="me-av" id="sb-av"></div>
-        <div><div class="me-name" id="sb-nm">—</div><div class="me-handle" id="sb-un">—</div></div>
-        <button class="me-out" onclick="event.stopPropagation();doLogout()" title="Sign out">↩</button>
-      </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num" data-count="6">0</div><div class="stat-label">Topik Psikologi</div></div>
+      <div class="stat"><div class="stat-num" data-count="3">0</div><div class="stat-label">Teknik Breathing</div></div>
+      <div class="stat"><div class="stat-num" data-count="4">0</div><div class="stat-label">Sumber Terpercaya</div></div>
+      <div class="stat"><div class="stat-num" data-count="5">0</div><div class="stat-label">Pertanyaan Self-Check</div></div>
     </div>
   </div>
+  <div class="scroll-hint"><div class="scroll-line"></div>Scroll</div>
+</section>
 
-  <!-- MAIN -->
-  <div id="main">
-    <div class="topbar">
-      <div class="tb-title" id="tb-title">Home Feed</div>
-      <div class="tb-right">
-        <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
-      </div>
+<!-- TOPICS -->
+<section id="topics" class="section-wrap">
+  <div class="container">
+    <div class="sec-header reveal">
+      <p class="sec-label">Topik Psikologi</p>
+      <h2 class="sec-title">Apa yang ingin kamu <em>pahami?</em></h2>
+      <p class="sec-desc">Semua konten dirangkum dari jurnal ilmiah & lembaga psikologi terpercaya. Klik kartu untuk baca lebih dalam.</p>
     </div>
-    <div class="feed-wrap">
+    <div class="topics-filter reveal">
+      <button class="filter-btn active" onclick="filterTopics('all',this)">Semua</button>
+      <button class="filter-btn" onclick="filterTopics('Trauma',this)">Trauma</button>
+      <button class="filter-btn" onclick="filterTopics('Emosi',this)">Emosi</button>
+      <button class="filter-btn" onclick="filterTopics('Hubungan',this)">Hubungan</button>
+      <button class="filter-btn" onclick="filterTopics('Gangguan',this)">Gangguan</button>
+    </div>
+    <div class="topics-grid" id="topicsGrid"></div>
+  </div>
+</section>
 
-      <!-- FEED -->
-      <div id="pg-feed" class="pg on">
-        <div class="composer">
-          <div class="co-av" id="co-av"></div>
-          <div class="co-body">
-            <textarea class="co-txt" id="co-txt" rows="2" placeholder="What are you building today?"></textarea>
-            <div id="post-img-preview"></div>
-            <div class="co-actions">
-              <div class="co-left">
-                <label class="img-label" for="post-img-input" title="Add image">📷</label>
-                <input type="file" id="post-img-input" accept="image/*" onchange="previewPostImg(this)">
-              </div>
-              <button class="btn-post" onclick="doPost()">Post →</button>
-            </div>
+<!-- BREATHING -->
+<section id="breathing" class="section-wrap">
+  <div class="breathing-inner">
+    <div class="breathing-text">
+      <p class="sec-label" style="justify-content:flex-start">Latihan Mindfulness</p>
+      <h2 class="sec-title" style="text-align:left">Napas adalah<br><em>jangkar</em> pikiranmu.</h2>
+      <p>Ketika cemas atau kewalahan, sistem saraf kita masuk ke mode "fight-or-flight". Pernapasan dalam mengaktifkan respons parasimpatik — secara harfiah menenangkan otak dari dalam.</p>
+      <p>Pilih teknik yang sesuai dengan kondisimu dan klik lingkaran untuk mulai.</p>
+      <div class="breath-techniques" id="breathTechs"></div>
+    </div>
+    <div class="breathing-widget">
+      <div class="breath-circle-wrap">
+        <div class="breath-outer">
+          <div class="breath-ring" id="breathRing"></div>
+          <div class="breath-circle" id="breathCircle" onclick="toggleBreath()">
+            <span class="breath-label">tap untuk</span>
+            <span class="breath-phase" id="breathPhase">Mulai</span>
+            <span class="breath-count" id="breathCount" style="display:none"></span>
           </div>
         </div>
-        <div id="feed-list"></div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <!-- EXPLORE -->
-      <div id="pg-explore" class="pg">
-        <div id="exp-list"></div>
-      </div>
+<!-- HEALING -->
+<section id="healing" class="section-wrap">
+  <div class="container">
+    <div class="sec-header reveal">
+      <p class="sec-label">Cara Penyembuhan</p>
+      <h2 class="sec-title">Sembuh itu <em>proses,</em> bukan garis finish.</h2>
+      <p class="sec-desc">Langkah-langkah berbasis panduan APA dan WHO. Tidak ada yang instant — dan itu normal.</p>
+    </div>
+    <div class="healing-grid" id="healGrid"></div>
+  </div>
+</section>
 
-      <!-- PROFILE -->
-      <div id="pg-profile" class="pg">
-        <div class="p-cover"></div>
-        <div class="p-info">
-          <label class="av-upload-wrap" id="prof-av-wrap" title="Change avatar" style="display:inline-block">
-            <div class="p-pav" id="prof-av"></div>
-            <div class="av-upload-over">📷</div>
-            <input type="file" id="av-file" accept="image/*" onchange="uploadAvatar(this)" style="display:none">
-          </label>
-          <div class="type-pill" id="prof-type">👤 Personal</div>
-          <div class="p-nameline">
-            <span class="p-pname" id="prof-name">—</span>
-            <span id="prof-badge"></span>
-          </div>
-          <div class="p-phandle" id="prof-handle">—</div>
-          <div class="p-pbio" id="prof-bio"></div>
-          <div class="p-stats">
-            <div><div class="ps-n" id="ps-posts">0</div><div class="ps-l">Posts</div></div>
-            <div><div class="ps-n" id="ps-fwrs">0</div><div class="ps-l">Followers</div></div>
-            <div><div class="ps-n" id="ps-fwng">0</div><div class="ps-l">Following</div></div>
-          </div>
-          <div id="prof-acts"></div>
+<!-- KONSULTASI -->
+<section id="konsultasi" class="section-wrap">
+  <div class="container">
+    <div class="konsultasi-layout">
+      <div class="konsul-left reveal">
+        <p class="sec-label" style="justify-content:flex-start">Ruang Bicara AI</p>
+        <h2 class="sec-title" style="text-align:left">Ceritakan apa<br>yang <em>terasa berat.</em></h2>
+        <p>Lyra adalah teman bicara berbasis psikologi yang tidak akan menghakimi. Ia menggunakan pendekatan CBT, ACT, dan Mindfulness untuk membantu kamu mengeksplorasi perasaan.</p>
+        <div class="konsul-features">
+          <div class="konsul-feat"><span class="konsul-feat-icon">🔒</span><div class="konsul-feat-text"><h4>Aman & Privat</h4><p>Tidak ada yang merekam. Ini ruangmu sendiri.</p></div></div>
+          <div class="konsul-feat"><span class="konsul-feat-icon">🧠</span><div class="konsul-feat-text"><h4>Berbasis CBT & ACT</h4><p>Pendekatan yang terbukti secara klinis.</p></div></div>
+          <div class="konsul-feat"><span class="konsul-feat-icon">💜</span><div class="konsul-feat-text"><h4>Tanpa Penghakiman</h4><p>Mulai dari mana saja. Tidak ada yang terlalu kecil.</p></div></div>
         </div>
-        <div class="ptabs">
-          <div class="ptb on" onclick="swPTab('posts',this)">Posts</div>
-          <div class="ptb"    onclick="swPTab('port',this)">Portfolio</div>
+      </div>
+      <div class="chat-wrap reveal">
+        <div class="chat-header">
+          <div style="position:relative;width:40px;height:40px;flex-shrink:0">
+            <div class="chat-avatar">🌙</div>
+            <div class="chat-avatar-ring" style="position:absolute;inset:0"></div>
+          </div>
+          <div class="chat-meta" style="flex:1">
+            <h4>Lyra — Pendamping Psikologi</h4>
+            <span>CBT · ACT · Mindfulness</span>
+          </div>
+          <div class="online-dot"></div>
         </div>
-        <div id="pp-posts"></div>
-        <div id="pp-port" style="display:none"><div class="pg-grid" id="pp-port-g"></div></div>
+        <div class="chat-quick">
+          <span class="quick-chip" onclick="quickMsg('Saya merasa cemas belakangan ini')">😰 Merasa cemas</span>
+          <span class="quick-chip" onclick="quickMsg('Saya susah tidur dan terus memikirkan banyak hal')">🌙 Susah tidur</span>
+          <span class="quick-chip" onclick="quickMsg('Saya merasa lelah secara emosional')">😔 Kelelahan emosi</span>
+          <span class="quick-chip" onclick="quickMsg('Saya ingin memahami trauma saya')">💔 Tentang trauma</span>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <div class="msg bot"><div class="msg-bubble">Halo 👋 Aku Lyra. Kamu sudah berani sekali dengan hadir di sini.</div><div class="msg-time">Baru saja</div></div>
+          <div class="msg bot"><div class="msg-bubble">Ada yang ingin kamu ceritakan? Kita bisa mulai dari mana saja — tidak ada yang terlalu kecil atau terlalu besar. ✨</div><div class="msg-time">Baru saja</div></div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chatIn" placeholder="Tulis apa yang kamu rasakan..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+          <button class="chat-send" onclick="sendMsg()">➤</button>
+        </div>
+        <div class="crisis-bar">Dalam krisis? Hubungi <a href="tel:119">Hotline 119 ext 8</a> atau <a href="https://www.intothelightid.org" target="_blank">Into The Light ID</a></div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <!-- MY PORTFOLIO -->
-      <div id="pg-myport" class="pg">
-        <div class="pg-grid" id="myport-g"></div>
+<!-- SELF TEST -->
+<section id="selftest" class="section-wrap">
+  <div class="container">
+    <div class="test-layout">
+      <div class="test-info reveal">
+        <p class="sec-label" style="justify-content:flex-start">Kenali Dirimu</p>
+        <h2 class="sec-title" style="text-align:left">Refleksi diri <em>5 menit</em></h2>
+        <p>Pertanyaan singkat yang membantu kamu lebih sadar tentang kondisi emosionalmu saat ini. Bukan diagnosis klinis — hanya cermin untuk melihat diri lebih jelas.</p>
+        <div class="test-disclaimer">
+          <span class="test-disclaimer-icon">ℹ️</span>
+          <span>Hasil ini bukan pengganti diagnosis profesional. Jika kamu merasa perlu bantuan lebih, pertimbangkan untuk berkonsultasi dengan psikolog.</span>
+        </div>
       </div>
-
-      <!-- SAVED -->
-      <div id="pg-saved" class="pg">
-        <div id="saved-list"></div>
+      <div class="test-card reveal" id="testCard">
+        <div class="test-topbar">
+          <span class="test-title-bar">Self Check-In</span>
+          <div class="test-steps-bar" id="testStepsBar"></div>
+        </div>
+        <div class="test-body" id="testBody">
+          <!-- rendered by JS -->
+        </div>
+        <div class="test-footer">
+          <span class="test-progress-text" id="testProgText">Pertanyaan 1 dari 5</span>
+          <button class="test-next" onclick="nextQ()">Lanjut →</button>
+        </div>
       </div>
-
     </div>
   </div>
+</section>
 
-  <!-- RIGHT PANEL -->
-  <div id="rp">
-    <div class="widget w-dev">
-      <div class="wt">🛠️ Developer</div>
-      <div class="dev-txt">Built & maintained by <strong style="color:var(--gold)">@zhuma</strong> — founder of ZHUMA.</div>
+<!-- RESOURCES -->
+<section id="resources" class="section-wrap">
+  <div class="container">
+    <div class="sec-header reveal">
+      <p class="sec-label">Sumber Terpercaya</p>
+      <h2 class="sec-title">Belajar dari <em>sumber yang benar</em></h2>
+      <p class="sec-desc">Semua konten di PsycheSpace mengacu pada lembaga & jurnal berikut.</p>
     </div>
-    <div class="widget">
-      <div class="wt">🔥 Trending</div>
-      <div id="trending-list"></div>
+    <div class="resources-grid">
+      <div class="res-card reveal"><div class="res-icon">🧠</div><h4>American Psychological Assoc.</h4><p>Panduan klinis, riset peer-reviewed, dan definisi standar psikologi.</p><a href="https://www.apa.org" target="_blank" class="res-link">Kunjungi apa.org →</a></div>
+      <div class="res-card reveal"><div class="res-icon">🌍</div><h4>WHO Mental Health</h4><p>Panduan global tentang gangguan jiwa, pencegahan, dan pemulihan.</p><a href="https://www.who.int/health-topics/mental-health" target="_blank" class="res-link">Kunjungi who.int →</a></div>
+      <div class="res-card reveal"><div class="res-icon">🏥</div><h4>NIMH</h4><p>National Institute of Mental Health — riset mutakhir berbasis bukti.</p><a href="https://www.nimh.nih.gov" target="_blank" class="res-link">Kunjungi nimh.nih.gov →</a></div>
+      <div class="res-card reveal"><div class="res-icon">🇮🇩</div><h4>Into The Light Indonesia</h4><p>Organisasi kesehatan jiwa Indonesia. Hotline, komunitas, & edukasi.</p><a href="https://www.intothelightid.org" target="_blank" class="res-link">Kunjungi intothelightid.org →</a></div>
     </div>
-    <div class="widget">
-      <div class="wt">✨ Suggested</div>
-      <div id="sug-list"></div>
-    </div>
-    <div class="widget">
-      <div class="wt">📡 ZHUMA</div>
-      <div style="font-size:12px;color:var(--w3);line-height:1.7">Share work, grow your network, build your legacy.</div>
-      <div style="margin-top:8px;font-size:11px;color:var(--w4)">© 2026 ZHUMA</div>
+    <div class="crisis-card reveal">
+      <span class="crisis-icon">🆘</span>
+      <div class="crisis-text">
+        <h4>Butuh bantuan sekarang?</h4>
+        <p>Jika kamu sedang dalam kondisi krisis atau memiliki pikiran menyakiti diri sendiri, tolong segera hubungi bantuan. Kamu berhak mendapatkan pertolongan. <br><strong>Hotline Kesehatan Jiwa Indonesia: <a href="tel:119">119 ext 8</a></strong> (24 jam, gratis) · Into The Light: <a href="https://www.intothelightid.org" target="_blank">intothelightid.org</a></p>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- MODAL: ADD PORTFOLIO -->
-<div class="ov" id="mo-port">
-  <div class="mo">
-    <div class="mo-title">Add Project <button class="mo-x" onclick="closeMo('mo-port')">✕</button></div>
-    <div class="fi"><label class="fl">Title</label><input class="inp" id="pt-ti" placeholder="My Project"></div>
-    <div class="fi"><label class="fl">Description</label><textarea class="inp" id="pt-de" rows="3" placeholder="What did you build?" style="resize:none"></textarea></div>
-    <div class="fi"><label class="fl">Tags (comma separated)</label><input class="inp" id="pt-ta" placeholder="React, Design, Engineering"></div>
-    <div class="fi"><label class="fl">Project URL (optional)</label><input class="inp" type="url" id="pt-ur" placeholder="https://..."></div>
-    <button class="btn-p" onclick="savePt()">Save Project →</button>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-f">✦ PsycheSpace</div>
+      <p>Ruang edukatif psikologi berbasis bukti ilmiah. Untuk semua orang yang sedang belajar mengenal diri sendiri.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Konten</h5>
+      <a href="#topics">Topik Psikologi</a>
+      <a href="#breathing">Latihan Napas</a>
+      <a href="#healing">Cara Penyembuhan</a>
+      <a href="#selftest">Self-Test</a>
+    </div>
+    <div class="footer-col">
+      <h5>Info</h5>
+      <a href="#resources">Sumber Referensi</a>
+      <a href="#konsultasi">Konsultasi AI</a>
+      <a href="https://www.intothelightid.org" target="_blank">Bantuan Krisis</a>
+    </div>
   </div>
-</div>
-
-<!-- MODAL: EDIT PROFILE -->
-<div class="ov" id="mo-edit">
-  <div class="mo">
-    <div class="mo-title">Edit Profile <button class="mo-x" onclick="closeMo('mo-edit')">✕</button></div>
-    <div class="fi"><label class="fl">Full Name</label><input class="inp" id="ep-nm"></div>
-    <div class="fi"><label class="fl">Bio</label><textarea class="inp" id="ep-bi" rows="3" style="resize:none" placeholder="Tell people about yourself..."></textarea></div>
-    <div class="fi"><label class="fl">Location</label><input class="inp" id="ep-lo" placeholder="Jakarta, Indonesia"></div>
-    <div class="fi"><label class="fl">Website</label><input class="inp" type="url" id="ep-we" placeholder="https://yoursite.com"></div>
-    <button class="btn-p" onclick="saveEdit()">Save Changes →</button>
+  <div class="footer-bottom">
+    <span class="footer-note">© 2025 PsycheSpace · Konten bersifat edukatif, bukan diagnosa klinis.</span>
+    <div class="footer-socials">
+      <div class="soc">IG</div>
+      <div class="soc">𝕏</div>
+      <div class="soc">✉</div>
+    </div>
   </div>
-</div>
+</footer>
 
 <script>
-/* ════════════════════════════════
-   SUPABASE
-════════════════════════════════ */
-const SB_URL = 'https://iboklhufsrxotlvbltal.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlib2tsaHVmc3J4b3RsdmJsdGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5NTkyNTEsImV4cCI6MjA5MzUzNTI1MX0.KkiWTi8sMtbG_nSwPxKI96ce0qAjLqHMBr2_uOCVrc8';
-const sb = supabase.createClient(SB_URL, SB_KEY);
-const DEV = 'zhuma';
+// ============================
+// LOADER
+// ============================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hide');
+    setTimeout(() => document.getElementById('loader').remove(), 700);
+  }, 2000);
+});
 
-let CU=null, CP=null, acType='personal', viewUID=null, postImgFile=null;
-const $=id=>document.getElementById(id);
-const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const ini=n=>(n||'?').charAt(0).toUpperCase();
-const avH=(url,name)=>url?`<img src="${esc(url)}" loading="lazy">`:`${ini(name)}`;
-const ago=ts=>{const s=(Date.now()-new Date(ts))/1e3;if(s<60)return 'now';if(s<3600)return~~(s/60)+'m';if(s<86400)return~~(s/3600)+'h';return ~~(s/86400)+'d';};
-const devB=u=>(u||'').toLowerCase()===DEV?`<span class="badge b-dev">🛠️ Dev</span>`:'';
-
-/* ── TOAST ── */
-function toast(msg,type='info'){
-  const d=document.createElement('div');
-  d.className=`t ${type==='success'?'ok':type==='error'?'err':'info'}`;
-  d.innerHTML=`<span>${{success:'✅',error:'❌',info:'💬'}[type]||'💬'}</span>${msg}`;
-  $('toasts').appendChild(d);
-  setTimeout(()=>d.remove(),3200);
-}
-
-/* ── THEME ── */
-function toggleTheme(){
-  const html=document.documentElement;
-  const dark=html.getAttribute('data-theme')==='dark';
-  html.setAttribute('data-theme',dark?'light':'dark');
-  $('theme-btn').textContent=dark?'🌙':'☀️';
-  localStorage.setItem('zh-theme',dark?'light':'dark');
-}
-(()=>{
-  const t=localStorage.getItem('zh-theme')||'dark';
-  document.documentElement.setAttribute('data-theme',t);
-  // theme-btn not yet in DOM, will be set after bootApp
-})();
-
-/* ── MODAL ── */
-function openMo(id){$(id).classList.add('on');}
-function closeMo(id){$(id).classList.remove('on');}
-document.querySelectorAll('.ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('on');}));
-
-/* ── AUTH ── */
-function swTab(t){
-  $('f-login').style.display=t==='login'?'':'none';
-  $('f-reg').style.display=t==='reg'?'':'none';
-  document.querySelectorAll('.seg').forEach((b,i)=>b.classList.toggle('on',(t==='login'&&i===0)||(t==='reg'&&i===1)));
-}
-function pickT(v,el){
-  acType=v;
-  document.querySelectorAll('.tc').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');
-}
-async function doLogin(){
-  const em=$('l-em').value.trim(),pw=$('l-pw').value;
-  if(!em||!pw){toast('Fill all fields','error');return;}
-  const b=$('btn-li');b.disabled=true;b.textContent='Signing in...';
-  const{error}=await sb.auth.signInWithPassword({email:em,password:pw});
-  if(error){toast(error.message,'error');b.disabled=false;b.textContent='Sign in →';}
-}
-async function doReg(){
-  const nm=$('r-nm').value.trim(),un=$('r-un').value.trim(),em=$('r-em').value.trim(),pw=$('r-pw').value;
-  if(!nm||!un||!em||!pw){toast('Fill all fields','error');return;}
-  if(pw.length<6){toast('Password min 6 chars','error');return;}
-  const{data:ex}=await sb.from('profiles').select('id').eq('username',un).maybeSingle();
-  if(ex){toast('Username taken','error');return;}
-  const b=$('btn-rg');b.disabled=true;b.textContent='Creating...';
-  const{error}=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:nm,username:un,account_type:acType}}});
-  b.disabled=false;b.textContent='Create account →';
-  if(error)toast(error.message,'error');
-  else toast('Check your email to verify! ✉️','success');
-}
-async function doLogout(){
-  await sb.auth.signOut();
-  CU=null;CP=null;
-  $('app').classList.remove('on');
-  $('app').style.display='none';
-  $('auth').style.display='flex';
-  toast('Signed out','info');
-}
-
-/* ── INIT ── */
-async function init(){
-  const[,{data:{session}}]=await Promise.all([
-    new Promise(r=>setTimeout(r,2000)),
-    sb.auth.getSession()
-  ]);
-  const ld=$('loader');
-  ld.style.opacity='0';
-  setTimeout(()=>ld.style.display='none',480);
-
-  if(session){CU=session.user;await fetchCP();bootApp();}
-  else{$('auth').style.display='flex';}
-
-  sb.auth.onAuthStateChange(async(ev,sess)=>{
-    if(ev==='SIGNED_IN'&&sess){
-      CU=sess.user;await fetchCP();
-      $('auth').style.display='none';
-      bootApp();
-    }
-    if(ev==='SIGNED_OUT'){
-      $('app').classList.remove('on');
-      $('app').style.display='none';
-      $('auth').style.display='flex';
-    }
+// ============================
+// CURSOR
+// ============================
+const cur = document.getElementById('cur');
+const curR = document.getElementById('curR');
+if(cur) {
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function anim(){
+    if(cur){cur.style.left=mx+'px';cur.style.top=my+'px';}
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    if(curR){curR.style.left=rx+'px';curR.style.top=ry+'px';}
+    requestAnimationFrame(anim);
+  })();
+  document.querySelectorAll('a,button,.topic-card,.mood-emoji,.test-opt,.breath-circle,.quick-chip').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.classList.add('link');curR.classList.add('link');});
+    el.addEventListener('mouseleave',()=>{cur.classList.remove('link');curR.classList.remove('link');});
   });
 }
 
-async function fetchCP(){
-  if(!CU)return;
-  const{data}=await sb.from('profiles').select('*').eq('id',CU.id).maybeSingle();
-  if(data){CP=data;refreshSB();}
+// ============================
+// NAV SCROLL
+// ============================
+window.addEventListener('scroll',()=>{
+  const nav=document.getElementById('nav');
+  nav.classList.toggle('scrolled',window.scrollY>60);
+  // active links
+  const sections=['topics','breathing','healing','konsultasi','selftest','resources'];
+  let cur='';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&window.scrollY>=el.offsetTop-120)cur=id;
+  });
+  document.querySelectorAll('.nav-link').forEach(a=>{
+    a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+  });
+});
+
+// ============================
+// MOBILE MENU
+// ============================
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  const h=document.getElementById('hamburger');
+  m.classList.toggle('open');
+  h.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
 }
 
-function refreshSB(){
-  if(!CP)return;
-  $('sb-av').innerHTML=avH(CP.avatar_url,CP.full_name||CP.username);
-  $('co-av').innerHTML=avH(CP.avatar_url,CP.full_name||CP.username);
-  $('sb-nm').textContent=CP.full_name||CP.username||'—';
-  $('sb-un').textContent='@'+(CP.username||'');
-  // fix theme btn icon
-  const t=document.documentElement.getAttribute('data-theme');
-  $('theme-btn').textContent=t==='dark'?'🌙':'☀️';
+// ============================
+// MOOD BANNER
+// ============================
+function pickMood(el,emoji,msg){
+  document.querySelectorAll('.mood-emoji').forEach(e=>e.classList.remove('picked'));
+  el.classList.add('picked');
+  const r=document.getElementById('moodReply');
+  r.textContent=msg;
+  r.classList.add('show');
 }
 
-function bootApp(){
-  $('app').style.display='';
-  $('app').classList.add('on');
-  loadFeed();loadSuggestions();loadTrending();
-}
-
-/* ── PAGES ── */
-const PAGE_TITLES={feed:'Home Feed',explore:'Explore',profile:'Profile',myport:'My Portfolio',saved:'Bookmarks'};
-function goPage(name,btn){
-  document.querySelectorAll('.pg').forEach(p=>{p.classList.remove('on');});
-  $('pg-'+name).classList.add('on');
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  if(btn)btn.classList.add('on');
-  $('tb-title').textContent=PAGE_TITLES[name]||'ZHUMA';
-  if(name==='explore')loadExplore();
-  if(name==='myport')loadMyPort();
-  if(name==='saved')loadSaved();
-}
-
-function goMyProf(btn){
-  if(!CU)return;
-  goPage('profile',btn);
-  loadProfile(CU.id);
-}
-
-/* ── SEARCH ── */
-let searchTimeout;
-async function doSearch(q){
-  const box=$('search-results');
-  if(!q||q.length<2){box.classList.remove('open');box.innerHTML='';return;}
-  clearTimeout(searchTimeout);
-  searchTimeout=setTimeout(async()=>{
-    const{data}=await sb.from('profiles').select('id,username,full_name,avatar_url')
-      .or(`username.ilike.%${q}%,full_name.ilike.%${q}%`).limit(6);
-    if(!data||!data.length){box.innerHTML=`<div style="padding:12px 14px;font-size:13px;color:var(--w3)">No results</div>`;box.classList.add('open');return;}
-    box.innerHTML=data.map(u=>`<div class="sr-item" onclick="viewProf('${u.id}');$('search-inp').value='';$('search-results').classList.remove('open')">
-      <div class="sr-av">${avH(u.avatar_url,u.full_name||u.username)}</div>
-      <div><div class="sr-name">${esc(u.full_name||u.username)}</div><div class="sr-handle">@${esc(u.username)}</div></div>
-    </div>`).join('');
-    box.classList.add('open');
-  },280);
-}
-document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))$('search-results').classList.remove('open');});
-
-/* ── FEED ── */
-async function loadFeed(){
-  const list=$('feed-list');
-  list.innerHTML=`<div class="empty"><span class="e-ic">⏳</span><div class="e-t">Loading...</div></div>`;
-  const{data,error}=await sb.from('posts')
-    .select('*,profiles(id,username,full_name,avatar_url,account_type)')
-    .order('created_at',{ascending:false}).limit(40);
-  if(error){list.innerHTML=`<div class="empty"><span class="e-ic">⚠️</span><div class="e-t">Error loading feed</div><div class="e-s">${esc(error.message)}</div></div>`;return;}
-  if(!data||!data.length){list.innerHTML=`<div class="empty"><span class="e-ic">✨</span><div class="e-t">Feed is empty</div><div class="e-s">Be the first to post!</div></div>`;return;}
-  list.innerHTML=data.map(p=>postHTML(p)).join('');
-}
-
-function postHTML(p,showDel=true){
-  const pr=p.profiles||{};
-  const isOwn=showDel&&CU&&pr.id===CU.id;
-  return `
-  <div class="post" id="post-${p.id}">
-    <div class="p-row">
-      <div class="p-av" onclick="viewProf('${pr.id}')">${avH(pr.avatar_url,pr.full_name||pr.username)}</div>
-      <div class="p-body">
-        <div class="p-meta">
-          <span class="p-name" onclick="viewProf('${pr.id}')">${esc(pr.full_name||pr.username||'?')}</span>
-          ${devB(pr.username)}
-          <span class="p-dot">·</span>
-          <span class="p-handle">@${esc(pr.username||'')}</span>
-          <span class="p-dot">·</span>
-          <span class="p-time">${ago(p.created_at)}</span>
-        </div>
-        <div class="p-txt">${esc(p.content)}</div>
-        ${p.image_url?`<img class="p-img" src="${esc(p.image_url)}" loading="lazy">`:''}
-        <div class="p-acts">
-          <button class="pa" onclick="toggleLike('${p.id}',this)"><span class="pa-ic">🤍</span>${p.likes_count||0}</button>
-          <button class="pa" onclick="toggleComments('${p.id}',this)"><span class="pa-ic">💬</span>${p.comments_count||0}</button>
-          <button class="pa" onclick="toggleSave('${p.id}',this)"><span class="pa-ic">🔖</span>Save</button>
-        </div>
-      </div>
-    </div>
-    ${isOwn?`<button class="p-del" onclick="delPost('${p.id}')">🗑</button>`:''}
-  </div>
-  <div class="comments-box" id="cmts-${p.id}">
-    <div class="comment-list" id="cmtlist-${p.id}"></div>
-    <div class="comment-inp-row">
-      <input class="cm-inp" id="cminp-${p.id}" placeholder="Write a comment..." onkeydown="if(event.key==='Enter')sendComment('${p.id}')">
-      <button class="cm-send" onclick="sendComment('${p.id}')">Send</button>
-    </div>
-  </div>`;
-}
-
-/* post with image */
-let postImgDataUrl=null;
-function previewPostImg(input){
-  const file=input.files[0];if(!file)return;
-  postImgFile=file;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    postImgDataUrl=e.target.result;
-    $('post-img-preview').innerHTML=`<div class="img-preview"><img src="${e.target.result}"><button class="img-rm" onclick="clearPostImg()">✕</button></div>`;
-  };
-  reader.readAsDataURL(file);
-}
-function clearPostImg(){postImgFile=null;postImgDataUrl=null;$('post-img-preview').innerHTML='';$('post-img-input').value='';}
-
-async function doPost(){
-  const txt=$('co-txt').value.trim();
-  if(!txt){toast('Write something!','error');return;}
-  if(!CU){toast('Sign in first','error');return;}
-  const btn=document.querySelector('#pg-feed .btn-post');
-  btn.disabled=true;btn.textContent='Posting...';
-
-  let img_url=null;
-  if(postImgFile){
-    const ext=postImgFile.name.split('.').pop();
-    const path=`${CU.id}/${Date.now()}.${ext}`;
-    const{data:up,error:upErr}=await sb.storage.from('posts').upload(path,postImgFile,{upsert:true});
-    if(!upErr){
-      const{data:pu}=sb.storage.from('posts').getPublicUrl(path);
-      img_url=pu.publicUrl;
+// ============================
+// COUNTER ANIMATION
+// ============================
+const countEls=document.querySelectorAll('[data-count]');
+const countObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const target=+e.target.dataset.count;
+      let i=0;
+      const step=()=>{if(i<target){i++;e.target.textContent=i;setTimeout(step,80);}};
+      step();
+      countObs.unobserve(e.target);
     }
+  });
+},{threshold:0.5});
+countEls.forEach(el=>countObs.observe(el));
+
+// ============================
+// TOPIC DATA
+// ============================
+const topics=[
+  {icon:'💔',tag:'Trauma',cat:'Trauma',diff:'Mendalam',read:'8 min',title:'Memahami Trauma',desc:'Trauma bukan tentang lemah atau kuat. Ini respons alami otak terhadap pengalaman yang terlalu besar untuk diproses.',full:`<h4>Apa itu Trauma?</h4><p>Trauma psikologis adalah respons emosional dan fisiologis yang terjadi setelah seseorang mengalami atau menyaksikan peristiwa yang mengancam keselamatan atau kepercayaan dasar. Trauma bukan tentang seberapa "besar" kejadiannya, melainkan bagaimana sistem saraf memrosesnya.</p><h4>Jenis-Jenis Trauma</h4><ul><li><strong>Trauma Akut:</strong> Satu kejadian spesifik — kecelakaan, bencana, serangan.</li><li><strong>Trauma Kompleks (C-PTSD):</strong> Paparan berulang, sering di masa kecil.</li><li><strong>Trauma Sekunder:</strong> Pada pendamping atau perawat korban trauma.</li><li><strong>Trauma Perkembangan:</strong> Gangguan pada periode kritis tumbuh kembang.</li></ul><h4>Gejala yang Perlu Dikenali</h4><ul><li>Flashback dan mimpi buruk berulang</li><li>Menghindari pemicu yang mengingatkan kejadian</li><li>Hiperarousal — mudah terkejut, sulit tidur, selalu waspada</li><li>Perubahan cara pandang terhadap diri dan dunia</li><li>Mati rasa emosional (emotional numbness)</li></ul><h4>Apa yang Terjadi di Otak?</h4><p>Penelitian neurobiologi menunjukkan trauma mengubah fungsi amigdala (pusat rasa takut), hipokampus (memori), dan korteks prefrontal (pengambilan keputusan). Ini menjelaskan mengapa respons trauma terasa di luar kendali.</p><h4>Jalan Menuju Pemulihan</h4><ul><li>EMDR (Eye Movement Desensitization and Reprocessing)</li><li>Trauma-Focused CBT</li><li>Somatic Experiencing</li><li>Dukungan komunitas dan koneksi yang aman</li></ul>`,source:'APA (2023), "Trauma." Van der Kolk, B. (2014). The Body Keeps the Score. Penguin.'},
+  {icon:'🪞',tag:'Diri',cat:'Emosi',diff:'Pemula',read:'5 min',title:'Kesadaran Diri',desc:'Mengenali emosi, pola pikir, dan perilakumu sendiri adalah fondasi dari kesehatan mental yang nyata.',full:`<h4>Mengapa Self-Awareness Penting?</h4><p>Self-awareness adalah kemampuan mengamati pikiran dan emosi diri secara objektif. Riset dari Harvard Business Review menunjukkan hanya sekitar 10–15% orang yang benar-benar self-aware, meski 95% percaya mereka sudah begitu.</p><h4>Dua Dimensi Self-Awareness</h4><ul><li><strong>Internal:</strong> Memahami nilai, passion, dan pola emosi dari dalam diri.</li><li><strong>Eksternal:</strong> Memahami bagaimana orang lain melihat kita.</li></ul><h4>Cara Meningkatkannya</h4><ul><li><strong>Journaling harian:</strong> Tulis 3 hal yang kamu rasakan hari ini.</li><li><strong>Mindfulness:</strong> Amati pikiran tanpa menghakimi.</li><li><strong>Feedback aktif:</strong> Minta pendapat jujur dari orang terpercaya.</li><li><strong>Pause & Reflect:</strong> Sebelum bereaksi, tanya "mengapa aku merasa ini?"</li></ul><h4>Self-Awareness & Kesehatan Mental</h4><p>Tingkat self-awareness tinggi berkorelasi dengan kepuasan hidup yang lebih besar, hubungan yang lebih sehat, dan kemampuan regulasi emosi yang lebih baik (Eurich, 2018).</p>`,source:'Eurich, T. (2018). Insight. Currency. APA Dictionary of Psychology.'},
+  {icon:'😰',tag:'Kecemasan',cat:'Gangguan',diff:'Menengah',read:'7 min',title:'Kecemasan & Anxiety',desc:'Kecemasan adalah sinyal dari tubuh. Belajar membaca sinyal itu tanpa terjebak di dalamnya.',full:`<h4>Normal vs Anxiety Disorder</h4><p>Cemas adalah emosi normal dan adaptif — ia memperingatkan kita dari bahaya. Anxiety disorder terjadi ketika rasa cemas muncul berlebihan dan mengganggu fungsi sehari-hari tanpa ancaman nyata.</p><h4>Jenis Anxiety Disorder (DSM-5)</h4><ul><li><strong>GAD:</strong> Kekhawatiran berlebihan tentang banyak hal ≥6 bulan.</li><li><strong>Social Anxiety:</strong> Ketakutan intens dalam situasi sosial.</li><li><strong>Panic Disorder:</strong> Serangan panik berulang yang tidak terduga.</li><li><strong>Specific Phobia:</strong> Ketakutan ekstrem terhadap objek/situasi tertentu.</li></ul><h4>Respons Biologis</h4><p>Saat cemas, otak melepas kortisol dan adrenalin. Jantung berdegup kencang, napas pendek, otot menegang — tubuh bersiap menghadapi ancaman. Masalah muncul ketika alarm ini terus berbunyi tanpa ancaman nyata.</p><h4>Teknik Berbasis Bukti</h4><ul><li><strong>Box Breathing:</strong> Tarik 4 → tahan 4 → buang 4 → tahan 4.</li><li><strong>5-4-3-2-1 Grounding:</strong> 5 lihat, 4 sentuh, 3 dengar, 2 cium, 1 rasakan.</li><li><strong>Cognitive Restructuring:</strong> Tantang pikiran "bagaimana jika?" dengan bukti nyata.</li></ul>`,source:'DSM-5-TR, APA (2022). NIMH, "Anxiety Disorders," 2023.'},
+  {icon:'🫀',tag:'Emosi',cat:'Emosi',diff:'Menengah',read:'6 min',title:'Regulasi Emosi',desc:'Mengatur emosi bukan berarti menekannya. Ini tentang merasakannya tanpa membiarkannya menguasaimu.',full:`<h4>Apa itu Regulasi Emosi?</h4><p>Regulasi emosi adalah kemampuan mengidentifikasi, memahami, dan mengelola respons emosional secara efektif. Bukan tentang tidak merasakan, melainkan bagaimana merespons dengan bijak.</p><h4>Model Gross (2015)</h4><ul><li><strong>Situational Selection:</strong> Memilih/menghindari situasi pemicu.</li><li><strong>Cognitive Reappraisal:</strong> Mengubah cara pandang terhadap situasi.</li><li><strong>Response Modulation:</strong> Mengubah respons setelah emosi muncul.</li></ul><h4>Tanda Disregulasi</h4><ul><li>Ledakan amarah tidak proporsional</li><li>Sulit menoleransi perasaan tidak nyaman</li><li>Menghindari emosi dengan cara merusak</li><li>Emosi yang bertahan sangat lama</li></ul><h4>Strategi Efektif</h4><ul><li><strong>Labeling:</strong> Namai emosi spesifik — "aku frustrasi", bukan "aku tidak baik-baik saja."</li><li><strong>Opposite Action (DBT):</strong> Bertindak berlawanan dari dorongan merugikan.</li><li><strong>Self-Compassion:</strong> Perlakukan diri seperti kamu perlakukan sahabat.</li></ul>`,source:'Gross, J.J. (2015). Handbook of Emotion Regulation. Guilford Press.'},
+  {icon:'🌑',tag:'Depresi',cat:'Gangguan',diff:'Mendalam',read:'8 min',title:'Depresi & Mood',desc:'Depresi bukan "lebay" atau kurang bersyukur. Ini kondisi medis nyata yang bisa dan layak diobati.',full:`<h4>Lebih dari Sekadar Sedih</h4><p>Major Depressive Disorder (MDD) ditandai perasaan sedih mendalam, kehilangan minat, dan berbagai gejala fisik & kognitif yang berlangsung ≥2 minggu serta mengganggu fungsi sehari-hari.</p><h4>Gejala Utama (DSM-5)</h4><ul><li>Mood depresif hampir setiap hari</li><li>Kehilangan minat/kesenangan (anhedonia)</li><li>Perubahan berat badan/nafsu makan signifikan</li><li>Insomnia atau hipersomnia</li><li>Kelelahan atau kehilangan energi</li><li>Perasaan tidak berharga / rasa bersalah berlebihan</li><li>Sulit konsentrasi atau membuat keputusan</li><li>Pikiran tentang kematian</li></ul><h4>Yang Terjadi di Otak</h4><p>Depresi melibatkan perubahan neurotransmiter (serotonin, dopamin, norepinefrin), volume hipokampus yang mengecil, dan aktivitas berlebihan pada amigdala. Ini murni biologi.</p><h4>Pengobatan Berbasis Bukti</h4><ul><li><strong>CBT:</strong> Terbukti setara antidepresan untuk depresi ringan-sedang.</li><li><strong>SSRI:</strong> Lini pertama farmakologis.</li><li><strong>Olahraga:</strong> Meta-analisis menunjukkan 3x/minggu efektif sebagai adjuvan terapi.</li></ul>`,source:'DSM-5-TR (2022). WHO (2023). Cuijpers et al. (2020) meta-analysis.'},
+  {icon:'🔗',tag:'Attachment',cat:'Hubungan',diff:'Pemula',read:'6 min',title:'Gaya Kelekatan',desc:'Cara kamu berhubungan dengan orang lain dibentuk jauh sebelum kamu sadar — sejak masa bayi.',full:`<h4>Teori Attachment</h4><p>Bowlby & Ainsworth mengemukakan bahwa ikatan emosional awal antara anak dan pengasuh membentuk "peta internal" tentang diri dan hubungan — dan ini berlanjut ke dewasa.</p><h4>Empat Gaya Attachment Dewasa</h4><ul><li><strong>Secure:</strong> Nyaman dengan keintiman dan kemandirian. Komunikasi terbuka.</li><li><strong>Anxious:</strong> Takut ditinggalkan, butuh validasi konstan, cenderung clingy.</li><li><strong>Avoidant:</strong> Tidak nyaman dengan keintiman, sangat mandiri, sulit membuka diri.</li><li><strong>Disorganized:</strong> Campuran anxious & avoidant, sering terkait trauma masa kecil.</li></ul><h4>Bisakah Berubah?</h4><p>Ya! Attachment style bukan takdir. Hubungan yang sehat, terapi attachment-focused, dan kesadaran diri dapat membantu bergerak menuju pola yang lebih secure.</p><h4>Refleksi</h4><ul><li>Apakah kamu mudah percaya pada orang terdekat?</li><li>Apakah kamu sering takut ditinggal tanpa alasan jelas?</li><li>Apakah kamu cenderung menjauh ketika hubungan semakin dekat?</li></ul>`,source:'Bowlby, J. (1988). A Secure Base. Levine & Heller (2010). Attached. Penguin.'},
+];
+
+function renderTopics(filter='all'){
+  const g=document.getElementById('topicsGrid');
+  g.innerHTML='';
+  topics.filter(t=>filter==='all'||t.cat===filter).forEach((t,i)=>{
+    const c=document.createElement('div');
+    c.className='topic-card reveal';
+    c.innerHTML=`<div class="topic-card-top"><div class="topic-icon">${t.icon}</div><span class="topic-difficulty">${t.diff}</span></div><h3>${t.title}</h3><p>${t.desc}</p><div class="topic-footer"><span class="topic-tag">${t.tag}</span><span class="topic-read">📖 ${t.read}</span></div>`;
+    c.onclick=()=>openModal(topics.indexOf(t));
+    g.appendChild(c);
+    setTimeout(()=>c.classList.add('visible'),i*80+100);
+  });
+}
+renderTopics();
+function filterTopics(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTopics(f);
+}
+
+function openModal(i){
+  const t=topics[i];
+  document.getElementById('mIcon').textContent=t.icon;
+  document.getElementById('mTag').textContent=t.tag+' · '+t.read;
+  document.getElementById('mTitle').textContent=t.title;
+  document.getElementById('mBody').innerHTML=t.full;
+  document.getElementById('mSource').innerHTML=`<strong>📚 Referensi:</strong> ${t.source}`;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))closeModal();});
+
+// ============================
+// BREATHING
+// ============================
+const breathTechs=[
+  {name:'Box Breathing',desc:'4-4-4-4 · Untuk menenangkan & fokus',phases:[{label:'Tarik',dur:4},{label:'Tahan',dur:4},{label:'Buang',dur:4},{label:'Tahan',dur:4}]},
+  {name:'4-7-8 Breathing',desc:'Untuk tidur & redakan panik',phases:[{label:'Tarik',dur:4},{label:'Tahan',dur:7},{label:'Buang',dur:8}]},
+  {name:'Coherent Breathing',desc:'5-5 · Untuk keseimbangan harian',phases:[{label:'Tarik',dur:5},{label:'Buang',dur:5}]},
+];
+let bActive=0,bRunning=false,bPhaseIdx=0,bCountdown=0,bTimer=null;
+
+function renderBreathTechs(){
+  const c=document.getElementById('breathTechs');
+  c.innerHTML='';
+  breathTechs.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='breath-tech'+(i===bActive?' active':'');
+    d.innerHTML=`<span class="breath-tech-icon">${['🔲','🌊','♾️'][i]}</span><div><div class="breath-tech-name">${t.name}</div><div class="breath-tech-desc">${t.desc}</div></div>`;
+    d.onclick=()=>{bActive=i;stopBreath();renderBreathTechs();};
+    c.appendChild(d);
+  });
+}
+renderBreathTechs();
+
+function toggleBreath(){
+  if(bRunning)stopBreath();else startBreath();
+}
+function startBreath(){
+  bRunning=true;bPhaseIdx=0;
+  document.getElementById('breathCircle').classList.add('running');
+  document.getElementById('breathCount').style.display='block';
+  runPhase();
+}
+function stopBreath(){
+  bRunning=false;clearTimeout(bTimer);
+  document.getElementById('breathCircle').classList.remove('running');
+  document.getElementById('breathPhase').textContent='Mulai';
+  document.getElementById('breathCount').style.display='none';
+  document.querySelector('.breath-label').textContent='tap untuk';
+}
+function runPhase(){
+  if(!bRunning)return;
+  const tech=breathTechs[bActive];
+  const phase=tech.phases[bPhaseIdx%tech.phases.length];
+  document.getElementById('breathPhase').textContent=phase.label;
+  document.querySelector('.breath-label').textContent='';
+  bCountdown=phase.dur;
+  countDown(phase.dur,phase,tech);
+}
+function countDown(n,phase,tech){
+  if(!bRunning)return;
+  document.getElementById('breathCount').textContent=n;
+  if(n>0){bTimer=setTimeout(()=>countDown(n-1,phase,tech),1000);}
+  else{
+    bPhaseIdx++;
+    bTimer=setTimeout(()=>runPhase(),200);
   }
-
-  const{error}=await sb.from('posts').insert({user_id:CU.id,content:txt,image_url:img_url});
-  btn.disabled=false;btn.textContent='Post →';
-  if(error){toast(error.message,'error');return;}
-  $('co-txt').value='';clearPostImg();
-  toast('Posted!','success');
-  loadFeed();
 }
 
-async function delPost(id){
-  await sb.from('posts').delete().eq('id',id);
-  $('post-'+id)?.remove();$('cmts-'+id)?.remove();
-  toast('Deleted','info');
+// ============================
+// HEALING STEPS
+// ============================
+const healSteps=[
+  {num:'01',title:'Kenali & Beri Nama',desc:'Identifikasi apa yang kamu rasakan. "Aku sedang marah" jauh lebih berdaya daripada "aku tidak baik-baik saja."',time:'Setiap hari'},
+  {num:'02',title:'Validasi Dirimu Sendiri',desc:'Perasaanmu valid. Kamu tidak perlu membenarkan atau menyalahkan diri sendiri atas apa yang kamu rasakan.',time:'Setiap hari'},
+  {num:'03',title:'Cari Koneksi yang Aman',desc:'Bagikan dengan orang terpercaya atau profesional. Manusia adalah makhluk sosial — koneksi adalah bagian dari penyembuhan.',time:'Mingguan'},
+  {num:'04',title:'Bangun Rutinitas Kecil',desc:'Tidur teratur, makan cukup, dan gerak fisik ringan punya dampak besar pada kesehatan jiwa. Mulai dari yang kecil.',time:'Harian'},
+  {num:'05',title:'Proses, Jangan Pendam',desc:'Journaling, seni ekspresif, atau terapi membantu memproses apa yang tidak bisa diucapkan langsung.',time:'Mingguan'},
+  {num:'06',title:'Minta Bantuan Profesional',desc:'Psikolog & psikiater ada untuk situasi seperti ini. Meminta bantuan adalah tanda kekuatan, bukan kelemahan.',time:'Saat dibutuhkan'},
+];
+const hg=document.getElementById('healGrid');
+healSteps.forEach(s=>{
+  hg.innerHTML+=`<div class="heal-card reveal"><div class="heal-num">${s.num}</div><h3>${s.title}</h3><p>${s.desc}</p><div class="heal-time">⏱ ${s.time}</div></div>`;
+});
+
+// ============================
+// CHAT
+// ============================
+const lyraReplies=[
+  'Terima kasih sudah mau berbagi. Itu butuh keberanian. Boleh cerita lebih lanjut? Sejak kapan kamu merasakannya?',
+  'Aku dengar kamu. Perasaan itu sangat valid. Dalam psikologi, apa yang kamu rasakan adalah respons alami. Apakah ada situasi tertentu yang membuatnya terasa lebih berat?',
+  'Itu kedengarannya berat sekali untuk ditanggung sendiri. Apakah kamu sudah tidur dan makan cukup belakangan ini? Kondisi fisik sangat memengaruhi kesehatan mental kita.',
+  'Kamu tidak sendirian merasakan ini. Banyak orang melewati hal serupa dan berhasil. Satu langkah kecil yang bisa coba sekarang: tarik napas dalam 4 hitungan, tahan 4, buang 4. Bagaimana rasanya?',
+  'Terima kasih sudah terus bercerita. 💜 Ingat, kalau kamu butuh dukungan lebih nyata, psikolog profesional bisa sangat membantu. Di Indonesia kamu bisa ke Yayasan Pulih atau Into The Light ID.',
+  'Setiap langkah kecil itu berarti. Kamu sudah melakukan sesuatu yang hebat dengan mau mengenali perasaanmu hari ini. Itu bukan hal kecil, lho.',
+];
+let lyraIdx=0;
+
+function addMsg(text,isUser){
+  const cb=document.getElementById('chatBody');
+  const d=document.createElement('div');
+  d.className=`msg ${isUser?'user':'bot'}`;
+  const now=new Date().toLocaleTimeString('id',{hour:'2-digit',minute:'2-digit'});
+  d.innerHTML=`<div class="msg-bubble">${text}</div><div class="msg-time">${now}</div>`;
+  cb.appendChild(d);
+  cb.scrollTop=cb.scrollHeight;
+}
+function showTyping(){
+  const cb=document.getElementById('chatBody');
+  const d=document.createElement('div');
+  d.className='msg bot';d.id='typing';
+  d.innerHTML=`<div class="typing-bubble"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div>`;
+  cb.appendChild(d);cb.scrollTop=cb.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('chatIn');
+  const text=inp.value.trim();
+  if(!text)return;
+  addMsg(text,true);inp.value='';
+  showTyping();
+  setTimeout(()=>{
+    document.getElementById('typing')?.remove();
+    addMsg(lyraReplies[lyraIdx%lyraReplies.length],false);
+    lyraIdx++;
+  },1400+Math.random()*700);
+}
+function quickMsg(text){
+  document.getElementById('chatIn').value=text;
+  sendMsg();
+  document.getElementById('konsultasi').scrollIntoView({behavior:'smooth'});
 }
 
-/* ── LIKE ── */
-async function toggleLike(pid,btn){
-  if(!CU){toast('Sign in first','error');return;}
-  const{data:ex}=await sb.from('likes').select('id').eq('user_id',CU.id).eq('post_id',pid).maybeSingle();
-  const n=parseInt(btn.textContent.replace(/\D/g,''))||0;
-  if(ex){
-    await sb.from('likes').delete().eq('id',ex.id);
-    btn.classList.remove('liked');btn.innerHTML=`<span class="pa-ic">🤍</span>${Math.max(0,n-1)}`;
-  }else{
-    await sb.from('likes').insert({user_id:CU.id,post_id:pid});
-    btn.classList.add('liked');btn.innerHTML=`<span class="pa-ic">💜</span>${n+1}`;
-  }
-}
+// ============================
+// SELF TEST
+// ============================
+const qs=[
+  {q:'Dalam 2 minggu terakhir, seberapa sering kamu merasa putus asa atau tidak berdaya?',opts:['Hampir tidak pernah','Beberapa hari','Lebih dari setengah waktu','Hampir setiap hari']},
+  {q:'Bagaimana kualitas tidurmu belakangan ini?',opts:['Sangat baik','Cukup baik, kadang terganggu','Agak sering terganggu','Sangat buruk — insomnia atau terlalu banyak tidur']},
+  {q:'Seberapa mudah kamu merasa cemas tentang hal-hal sehari-hari?',opts:['Jarang sekali','Kadang-kadang, masih terkontrol','Cukup sering dan mengganggu','Hampir selalu, sulit dikendalikan']},
+  {q:'Apakah kamu masih bisa menikmati hal-hal yang dulu menyenangkan?',opts:['Ya, masih bisa menikmati','Sedikit berkurang tapi masih ada','Cukup sulit untuk menikmati','Hampir tidak ada yang menyenangkan lagi']},
+  {q:'Seberapa sering kamu bisa berbicara jujur tentang perasaanmu dengan seseorang?',opts:['Sering — ada orang yang bisa dipercaya','Kadang-kadang','Jarang, kebanyakan kusimpan sendiri','Tidak pernah — tidak ada yang bisa kupercaya']},
+];
+let qIdx=0,ans=[];
 
-/* ── SAVE / BOOKMARK ── */
-async function toggleSave(pid,btn){
-  if(!CU){toast('Sign in first','error');return;}
-  const{data:ex}=await sb.from('bookmarks').select('id').eq('user_id',CU.id).eq('post_id',pid).maybeSingle();
-  if(ex){
-    await sb.from('bookmarks').delete().eq('id',ex.id);
-    btn.classList.remove('saved');btn.innerHTML=`<span class="pa-ic">🔖</span>Save`;
-    toast('Removed from bookmarks','info');
-  }else{
-    await sb.from('bookmarks').insert({user_id:CU.id,post_id:pid});
-    btn.classList.add('saved');btn.innerHTML=`<span class="pa-ic">🔖</span>Saved`;
-    toast('Bookmarked!','success');
-  }
+function renderQ(){
+  const b=document.getElementById('testBody');
+  const p=document.getElementById('testProgText');
+  const bar=document.getElementById('testStepsBar');
+  p.textContent=`Pertanyaan ${qIdx+1} dari ${qs.length}`;
+  bar.innerHTML=qs.map((_,i)=>`<div class="test-step-dot ${i<qIdx?'done':i===qIdx?'current':''}"></div>`).join('');
+  b.innerHTML=`<div class="test-q-num">Pertanyaan ${qIdx+1}</div><div class="test-q-text">${qs[qIdx].q}</div><div class="test-options" id="testOpts"></div>`;
+  const opts=document.getElementById('testOpts');
+  qs[qIdx].opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='test-opt'+(ans[qIdx]===i?' sel':'');
+    btn.textContent=o;
+    btn.onclick=()=>{ans[qIdx]=i;document.querySelectorAll('.test-opt').forEach((el,j)=>el.classList.toggle('sel',j===i));};
+    opts.appendChild(btn);
+  });
 }
-
-async function loadSaved(){
-  const list=$('saved-list');
-  list.innerHTML=`<div class="empty"><span class="e-ic">⏳</span><div class="e-t">Loading...</div></div>`;
-  const{data}=await sb.from('bookmarks').select('post_id,posts(*,profiles(id,username,full_name,avatar_url,account_type))').eq('user_id',CU?.id||'x').order('created_at',{ascending:false});
-  if(!data||!data.length){list.innerHTML=`<div class="empty"><span class="e-ic">🔖</span><div class="e-t">No bookmarks yet</div><div class="e-s">Save posts to read later</div></div>`;return;}
-  list.innerHTML=data.map(b=>b.posts?postHTML(b.posts,false):'').join('');
+function nextQ(){
+  if(ans[qIdx]===undefined)return;
+  if(qIdx<qs.length-1){qIdx++;renderQ();}
+  else showResult();
 }
-
-/* ── COMMENTS ── */
-async function toggleComments(pid,btn){
-  const box=$('cmts-'+pid);
-  if(box.classList.contains('open')){box.classList.remove('open');return;}
-  box.classList.add('open');
-  loadComments(pid);
-}
-
-async function loadComments(pid){
-  const list=$('cmtlist-'+pid);
-  list.innerHTML='';
-  const{data}=await sb.from('comments').select('*,profiles(id,username,full_name,avatar_url)').eq('post_id',pid).order('created_at',{ascending:true}).limit(30);
-  if(!data||!data.length){list.innerHTML=`<div style="font-size:13px;color:var(--w4);padding:8px 0">No comments yet. Be first!</div>`;return;}
-  list.innerHTML=data.map(c=>{
-    const pr=c.profiles||{};
-    return `<div class="comment">
-      <div class="cm-av">${avH(pr.avatar_url,pr.full_name||pr.username)}</div>
-      <div class="cm-body">
-        <div class="cm-name">${esc(pr.full_name||pr.username||'?')}</div>
-        <div class="cm-txt">${esc(c.content)}</div>
-        <div class="cm-time">${ago(c.created_at)}</div>
+function showResult(){
+  const score=ans.reduce((a,b)=>a+b,0);
+  let icon,title,desc,color,tags,fillW;
+  if(score<=3){icon='🌱';title='Kondisimu Cukup Baik';desc='Berdasarkan refleksimu, kondisi emosionalmu saat ini tampak cukup stabil. Terus jaga diri dengan rutinitas sehat dan koneksi yang bermakna.';color='#6EE7B7';tags=['Stabil','Resilient'];fillW=25;}
+  else if(score<=7){icon='🌙';title='Ada Beberapa Hal yang Perlu Perhatian';desc='Ada beberapa area yang mungkin butuh perhatian lebih. Ini wajar sekali. Coba eksplorasi area yang terasa berat dan pertimbangkan berbicara dengan seseorang.';color='#C9AAFF';tags=['Perlu Perhatian','Ruang Tumbuh'];fillW=55;}
+  else{icon='💜';title='Kamu Sedang Menanggung Beban Berat';desc='Kamu mungkin sedang melewati masa yang sangat berat. Itu valid. Pertimbangkan untuk berbicara dengan psikolog profesional — itu bukan kelemahan, itu keberanian.';color='#F9A8D4';tags=['Perlu Dukungan','Profesional Dianjurkan'];fillW=85;}
+  
+  document.getElementById('testBody').innerHTML=`
+    <div class="test-result-inner">
+      <div class="result-icon">${icon}</div>
+      <div class="result-title" style="color:${color}">${title}</div>
+      <div class="result-score-bar"><div class="result-score-fill" style="width:0;background:${color}" id="rBar"></div></div>
+      <div class="result-tags">${tags.map(t=>`<span class="result-tag">${t}</span>`).join('')}</div>
+      <p class="result-desc">${desc}</p>
+      <div style="display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap">
+        <button class="btn-primary" onclick="document.getElementById('konsultasi').scrollIntoView({behavior:'smooth'})">Cerita ke Lyra 💬</button>
+        <button class="btn-ghost" onclick="resetTest()">Coba Lagi</button>
       </div>
     </div>`;
-  }).join('');
+  document.getElementById('testProgText').textContent='Selesai!';
+  document.getElementById('testStepsBar').innerHTML=qs.map(()=>`<div class="test-step-dot done"></div>`).join('');
+  document.querySelector('.test-next').style.display='none';
+  setTimeout(()=>{const b=document.getElementById('rBar');if(b)b.style.width=fillW+'%';},200);
 }
-
-async function sendComment(pid){
-  if(!CU){toast('Sign in first','error');return;}
-  const inp=$('cminp-'+pid);
-  const txt=inp.value.trim();if(!txt)return;
-  const{error}=await sb.from('comments').insert({user_id:CU.id,post_id:pid,content:txt});
-  if(error){toast(error.message,'error');return;}
-  inp.value='';
-  loadComments(pid);
-  // update count
-  const cntBtn=document.querySelector(`#post-${pid} .pa:nth-child(2)`);
-  if(cntBtn){const n=parseInt(cntBtn.textContent.replace(/\D/g,''))||0;cntBtn.innerHTML=`<span class="pa-ic">💬</span>${n+1}`;}
+function resetTest(){
+  qIdx=0;ans=[];
+  document.querySelector('.test-next').style.display='';
+  renderQ();
 }
+renderQ();
 
-/* ── EXPLORE ── */
-async function loadExplore(){
-  const list=$('exp-list');
-  list.innerHTML=`<div class="empty"><span class="e-ic">⏳</span><div class="e-t">Loading...</div></div>`;
-  const{data}=await sb.from('profiles').select('*').neq('id',CU?.id||'x').order('followers_count',{ascending:false}).limit(30);
-  if(!data||!data.length){list.innerHTML=`<div class="empty"><span class="e-ic">🔍</span><div class="e-t">No users yet</div></div>`;return;}
-  const tm={personal:'👤 Personal',company:'🏢 Company',na:'⚪ N/A'};
-  list.innerHTML=data.map(u=>`<div class="exp-card" onclick="viewProf('${u.id}')">
-    <div class="ex-av">${avH(u.avatar_url,u.full_name||u.username)}</div>
-    <div class="ex-info">
-      <div class="ex-name">${esc(u.full_name||u.username)} ${devB(u.username)}</div>
-      <div class="ex-handle">@${esc(u.username)} · ${tm[u.account_type]||''}</div>
-      ${u.bio?`<div class="ex-bio">${esc(u.bio.slice(0,60))}${u.bio.length>60?'...':''}</div>`:''}
-    </div>
-    <div style="text-align:right;flex-shrink:0">
-      <div style="font-weight:800;font-size:14px;color:var(--w)">${u.followers_count||0}</div>
-      <div style="font-size:10px;color:var(--w4)">followers</div>
-    </div>
-  </div>`).join('');
-}
+// ============================
+// SCROLL REVEAL
+// ============================
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+// Re-observe after topic filter
+const origReveal=window.filterTopics;
 
-/* ── SUGGESTIONS ── */
-async function loadSuggestions(){
-  const{data}=await sb.from('profiles').select('*').neq('id',CU?.id||'x').limit(5);
-  const list=$('sug-list');
-  if(!data||!data.length){list.innerHTML=`<div style="font-size:12px;color:var(--w4)">No suggestions yet</div>`;return;}
-  list.innerHTML=data.map(u=>`<div class="sug-row" onclick="viewProf('${u.id}')">
-    <div class="sg-av">${avH(u.avatar_url,u.full_name||u.username)}</div>
-    <div style="flex:1;min-width:0"><div class="sg-name">${esc(u.full_name||u.username)}</div><div class="sg-handle">@${esc(u.username)}</div></div>
-    <button class="sg-btn" onclick="event.stopPropagation();qFollow('${u.id}',this)">Follow</button>
-  </div>`).join('');
-}
-
-async function qFollow(uid,btn){
-  if(!CU){toast('Sign in first','error');return;}
-  await sb.from('connections').insert({follower_id:CU.id,following_id:uid}).catch(()=>{});
-  btn.textContent='✓';btn.style.color='var(--green)';btn.style.borderColor='var(--green)';
-  toast('Following!','success');
-}
-
-/* ── TRENDING ── */
-async function loadTrending(){
-  // simple: get recent posts and extract hashtags
-  const{data}=await sb.from('posts').select('content').order('created_at',{ascending:false}).limit(100);
-  const map={};
-  (data||[]).forEach(p=>{
-    const tags=(p.content.match(/#\w+/g)||[]);
-    tags.forEach(t=>{map[t]=(map[t]||0)+1;});
-  });
-  const sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  const list=$('trending-list');
-  if(!sorted.length){list.innerHTML=`<div style="font-size:12px;color:var(--w4)">No trending yet</div>`;return;}
-  list.innerHTML=sorted.map(([tag,cnt])=>`<div class="trend-item">
-    <div class="trend-tag">${esc(tag)}</div>
-    <div class="trend-cnt">${cnt} post${cnt>1?'s':''}</div>
-  </div>`).join('');
-}
-
-/* ── PROFILE ── */
-async function viewProf(uid){
-  goPage('profile',null);
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  loadProfile(uid);
-}
-
-async function loadProfile(uid){
-  viewUID=uid;
-  const{data:pr}=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
-  if(!pr)return;
-  const tm={personal:'👤 Personal',company:'🏢 Company',na:'⚪ N/A'};
-  $('prof-av').innerHTML=avH(pr.avatar_url,pr.full_name||pr.username);
-  $('prof-type').textContent=tm[pr.account_type]||'👤 Personal';
-  $('prof-name').textContent=pr.full_name||pr.username;
-  $('prof-badge').innerHTML=devB(pr.username);
-  $('prof-handle').textContent='@'+pr.username;
-  $('prof-bio').textContent=pr.bio||'';
-  $('ps-posts').textContent=pr.posts_count||0;
-  $('ps-fwrs').textContent=pr.followers_count||0;
-  $('ps-fwng').textContent=pr.following_count||0;
-  $('tb-title').textContent=(pr.full_name||pr.username||'Profile');
-
-  // show/hide avatar upload
-  const isOwn=CU&&uid===CU.id;
-  $('prof-av-wrap').style.pointerEvents=isOwn?'':'none';
-  $('prof-av-wrap').querySelector('.av-upload-over').style.display=isOwn?'':'none';
-
-  if(isOwn){
-    $('prof-acts').innerHTML=`<button class="btn-out" onclick="openEditMo()">Edit Profile</button>`;
-  }else{
-    const{data:conn}=await sb.from('connections').select('id').eq('follower_id',CU?.id||'x').eq('following_id',uid).maybeSingle();
-    $('prof-acts').innerHTML=`<button class="btn-flw ${conn?'ing':''}" onclick="toggleFollow('${uid}',this)">${conn?'Following':'Follow'}</button>`;
-  }
-
-  $('pp-posts').style.display='';$('pp-port').style.display='none';
-  document.querySelectorAll('.ptb').forEach((t,i)=>t.classList.toggle('on',i===0));
-  loadProfPosts(uid);loadProfPort(uid);
-}
-
-async function loadProfPosts(uid){
-  const{data}=await sb.from('posts').select('*,profiles(id,username,full_name,avatar_url,account_type)').eq('user_id',uid).order('created_at',{ascending:false});
-  $('pp-posts').innerHTML=(!data||!data.length)?`<div class="empty"><span class="e-ic">📝</span><div class="e-t">No posts yet</div></div>`:data.map(p=>postHTML(p)).join('');
-}
-
-async function loadProfPort(uid){
-  const{data}=await sb.from('portfolio').select('*').eq('user_id',uid).order('created_at',{ascending:false});
-  $('pp-port-g').innerHTML=(!data||!data.length)?`<div class="empty" style="grid-column:span 2"><span class="e-ic">🗂️</span><div class="e-t">No projects</div></div>`:data.map(i=>portCardH(i)).join('');
-}
-
-function swPTab(tab,el){
-  $('pp-posts').style.display=tab==='posts'?'':'none';
-  $('pp-port').style.display=tab==='port'?'':'none';
-  document.querySelectorAll('.ptb').forEach(t=>t.classList.remove('on'));
-  el.classList.add('on');
-}
-
-/* ── FOLLOW ── */
-async function toggleFollow(uid,btn){
-  if(!CU){toast('Sign in first','error');return;}
-  const isF=btn.classList.contains('ing');
-  if(isF){
-    const{data:c}=await sb.from('connections').select('id').eq('follower_id',CU.id).eq('following_id',uid).maybeSingle();
-    if(c)await sb.from('connections').delete().eq('id',c.id);
-    btn.classList.remove('ing');btn.textContent='Follow';
-  }else{
-    await sb.from('connections').insert({follower_id:CU.id,following_id:uid});
-    btn.classList.add('ing');btn.textContent='Following';
-    toast('Following!','success');
-  }
-  const{data:pr}=await sb.from('profiles').select('followers_count').eq('id',uid).maybeSingle();
-  if(pr)$('ps-fwrs').textContent=pr.followers_count||0;
-}
-
-/* ── AVATAR UPLOAD ── */
-async function uploadAvatar(input){
-  const file=input.files[0];if(!file||!CU)return;
-  toast('Uploading avatar...','info');
-  const ext=file.name.split('.').pop();
-  const path=`${CU.id}/avatar.${ext}`;
-  const{error}=await sb.storage.from('avatars').upload(path,file,{upsert:true});
-  if(error){toast(error.message,'error');return;}
-  const{data:pu}=sb.storage.from('avatars').getPublicUrl(path);
-  await sb.from('profiles').update({avatar_url:pu.publicUrl+'?t='+Date.now()}).eq('id',CU.id);
-  await fetchCP();
-  if(viewUID===CU.id)loadProfile(CU.id);
-  toast('Avatar updated!','success');
-}
-
-/* ── EDIT PROFILE ── */
-function openEditMo(){
-  if(!CP)return;
-  $('ep-nm').value=CP.full_name||'';
-  $('ep-bi').value=CP.bio||'';
-  $('ep-lo').value=CP.location||'';
-  $('ep-we').value=CP.website||'';
-  openMo('mo-edit');
-}
-async function saveEdit(){
-  const nm=$('ep-nm').value.trim(),bi=$('ep-bi').value.trim(),lo=$('ep-lo').value.trim(),we=$('ep-we').value.trim();
-  const{error}=await sb.from('profiles').update({full_name:nm,bio:bi,location:lo,website:we}).eq('id',CU.id);
-  if(error){toast(error.message,'error');return;}
-  toast('Profile updated!','success');
-  closeMo('mo-edit');
-  await fetchCP();
-  loadProfile(CU.id);
-}
-
-/* ── PORTFOLIO ── */
-function portCardH(item,canDel=false){
-  const tags=(item.tags||[]).map(t=>`<span class="ptag">${esc(t)}</span>`).join('');
-  return `<div class="port-card">
-    <div class="pc-thumb">🚀</div>
-    <div class="pc-body">
-      <div class="pc-title">${esc(item.title)}</div>
-      <div class="pc-desc">${esc(item.description||'')}</div>
-      <div class="pc-tags">${tags}</div>
-      ${item.project_url?`<a href="${esc(item.project_url)}" target="_blank" class="pc-link">View project →</a>`:''}
-      ${canDel?`<button class="pc-rm" onclick="delPort('${item.id}')">Remove</button>`:''}
-    </div>
-  </div>`;
-}
-
-async function loadMyPort(){
-  if(!CU)return;
-  const{data}=await sb.from('portfolio').select('*').eq('user_id',CU.id).order('created_at',{ascending:false});
-  $('myport-g').innerHTML=(!data||!data.length)?`<div class="empty" style="grid-column:span 2"><span class="e-ic">🗂️</span><div class="e-t">No projects yet</div><div class="e-s">Add your first one!</div></div>`:data.map(i=>portCardH(i,true)).join('');
-}
-
-async function savePt(){
-  const ti=$('pt-ti').value.trim(),de=$('pt-de').value.trim(),ta=$('pt-ta').value,ur=$('pt-ur').value.trim();
-  if(!ti){toast('Title required','error');return;}
-  const tags=ta.split(',').map(t=>t.trim()).filter(Boolean);
-  const{error}=await sb.from('portfolio').insert({user_id:CU.id,title:ti,description:de,tags,project_url:ur||null});
-  if(error){toast(error.message,'error');return;}
-  toast('Project added!','success');
-  closeMo('mo-port');
-  ['pt-ti','pt-de','pt-ta','pt-ur'].forEach(id=>$(id).value='');
-  loadMyPort();
-}
-
-async function delPort(id){
-  await sb.from('portfolio').delete().eq('id',id);
-  toast('Removed','info');loadMyPort();
-}
-
-/* ── START ── */
-init();
+// Key: Escape closes modal
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 </script>
 </body>
 </html>
